@@ -165,7 +165,29 @@ class InvoiceForm {
     removeProductRow(button) {
         const row = button.closest('tr');
         if (this.itemsContainer.querySelectorAll('tr').length > 1) {
+            // Also remove paired mobile card
+            const rowIndex = row.getAttribute('data-row-index');
+            if (rowIndex && this.mobileItemsContainer) {
+                const pairedCard = this.mobileItemsContainer.querySelector(`.product-card[data-row-index="${rowIndex}"]`);
+                if (pairedCard) pairedCard.remove();
+            }
             row.remove();
+            this.updateGrandTotal();
+        } else {
+            alert('At least one item is required');
+        }
+    }
+
+    removeProductCard(button) {
+        const card = button.closest('.product-card');
+        if (this.mobileItemsContainer && this.mobileItemsContainer.querySelectorAll('.product-card').length > 1) {
+            // Also remove paired desktop row
+            const rowIndex = card.getAttribute('data-row-index');
+            if (rowIndex && this.itemsContainer) {
+                const pairedRow = this.itemsContainer.querySelector(`tr[data-row-index="${rowIndex}"]`);
+                if (pairedRow) pairedRow.remove();
+            }
+            card.remove();
             this.updateGrandTotal();
         } else {
             alert('At least one item is required');

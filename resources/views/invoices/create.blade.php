@@ -1451,15 +1451,8 @@
 
     // Global function for removing a mobile card
     function removeProductCard(button) {
-        const card = button.closest('.product-card');
-        const container = document.getElementById('mobileItemsContainer');
-        if (container && container.querySelectorAll('.product-card').length > 1) {
-            card.remove();
-            if (typeof invoiceForm !== 'undefined') {
-                invoiceForm.updateGrandTotal();
-            }
-        } else {
-            alert('At least one item is required');
+        if (typeof invoiceForm !== 'undefined' && invoiceForm.removeProductCard) {
+            invoiceForm.removeProductCard(button);
         }
     }
 
