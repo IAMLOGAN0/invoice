@@ -13,18 +13,25 @@ class DueController extends Controller
     /**
      * List all customers with payment summary.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $customers = Customer::withCount('invoices')
+        $query = Customer::withCount('invoices')
             ->withSum('invoices as total_amount', 'grand_total')
             ->withSum('invoices as total_paid', 'paid_amount')
             ->withSum('invoices as total_due', 'due_amount')
-            ->withCount(['invoices as pending_invoices_count' => function ($query) {
-                $query->where('due_amount', '>', 0);
+            ->withCount(['invoices as pending_invoices_count' => function ($q) {
+                $q->where('due_amount', '>', 0);
             }])
-            ->having('invoices_count', '>', 0)
-            ->orderByDesc('total_due')
-            ->paginate(15);
+            ->having('invoices_count', '>', 0);
+
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%");
+            });
+        }
+
+        $customers = $query->orderByDesc('total_due')->paginate(15)->withQueryString();
 
         return view('dues.index', compact('customers'));
     }

@@ -21,6 +21,21 @@
         </a>
     </div>
 
+    <!-- Search Bar -->
+    <div class="mb-6">
+        <form method="GET" action="{{ route('customers.index') }}" class="flex gap-2">
+            <input type="text" name="search" placeholder="Search by customer name or phone..." value="{{ request('search') }}" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+            <button type="submit" class="bg-gray-800 hover:bg-gray-900 text-white px-6 py-2 rounded-lg font-medium transition">
+                Search
+            </button>
+            @if(request('search'))
+                <a href="{{ route('customers.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-2 rounded-lg font-medium transition">
+                    Reset
+                </a>
+            @endif
+        </form>
+    </div>
+
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col" style="height: 500px;">
         <div class="overflow-x-auto overflow-y-auto flex-1">
             <table class="w-full">
