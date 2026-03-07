@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
     // Invoice Routes
     Route::resource('invoices', InvoiceController::class);
     Route::get('/invoices/{invoice}/download', [InvoiceController::class, 'downloadPdf'])->name('invoices.downloadPdf');
+    Route::get('/invoices/{invoice}/receipt', [InvoiceController::class, 'receipt'])->name('invoices.receipt');
 
     // Product Routes
     Route::resource('products', ProductController::class);

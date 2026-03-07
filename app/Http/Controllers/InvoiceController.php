@@ -307,4 +307,13 @@ class InvoiceController extends Controller
         
         return $pdf->download('invoice-' . $invoice->invoice_no . '.pdf');
     }
+
+    /**
+     * Show thermal receipt view for printing
+     */
+    public function receipt(Invoice $invoice)
+    {
+        $invoice->load('items.product', 'customer', 'shop');
+        return view('invoices.receipt', compact('invoice'));
+    }
 }
