@@ -364,13 +364,22 @@
             <td>GRAND TOTAL</td>
             <td>₹{{ number_format($invoice->grand_total,2) }}</td>
         </tr>
+        <tr>
+            <td>Paid Amount</td>
+            <td style="color: #16a34a; font-weight: bold;">₹{{ number_format($invoice->paid_amount,2) }}</td>
+        </tr>
+        @if($invoice->due_amount > 0)
+        <tr>
+            <td>Due Amount</td>
+            <td style="color: #dc2626; font-weight: bold;">₹{{ number_format($invoice->due_amount,2) }}</td>
+        </tr>
+        @endif
     </table>
 
     <!-- FOOTER -->
     <div class="footer">
         <p>Thank you for your business</p>
         <p>This is a computer generated invoice</p>
-        <p style="margin-top: 12px; font-size: 8px; border-top: 1px solid #d1d5db; padding-top: 8px;">Developed by Soumendu Giri | soumendugiri654@gmail.com</p>
     </div>
 
 </div>

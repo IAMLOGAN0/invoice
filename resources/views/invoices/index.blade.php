@@ -53,9 +53,19 @@
                             <td class="px-6 py-4 text-sm text-gray-700">{{ $invoice->invoice_date ?? ($invoice->date ? $invoice->date->format('M d, Y') : 'N/A') }}</td>
                             <td class="px-6 py-4 text-sm font-semibold text-gray-900">₹{{ number_format($invoice->grand_total ?? $invoice->total ?? 0, 2) }}</td>
                             <td class="px-6 py-4 text-sm">
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    Active
-                                </span>
+                                @if($invoice->payment_status === 'paid')
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        Paid
+                                    </span>
+                                @elseif($invoice->payment_status === 'partial')
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        Partial
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                        Unpaid
+                                    </span>
+                                @endif
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <div class="flex justify-center">

@@ -152,6 +152,27 @@
                                 <span class="text-lg font-bold text-gray-900">Grand Total</span>
                                 <span class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-indigo-700 bg-clip-text text-transparent">₹{{ number_format($invoice->grand_total, 2) }}</span>
                             </div>
+
+                            <div class="pt-3 border-t border-gray-200 space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Paid Amount</span>
+                                    <span class="text-green-600 font-semibold">₹{{ number_format($invoice->paid_amount, 2) }}</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Due Amount</span>
+                                    <span class="{{ $invoice->due_amount > 0 ? 'text-red-600' : 'text-green-600' }} font-semibold">₹{{ number_format($invoice->due_amount, 2) }}</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Status</span>
+                                    @if($invoice->payment_status === 'paid')
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Paid</span>
+                                    @elseif($invoice->payment_status === 'partial')
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Partial</span>
+                                    @else
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Unpaid</span>
+                                    @endif
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

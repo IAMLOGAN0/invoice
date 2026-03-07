@@ -971,6 +971,17 @@
                             <span class="font-bold">Grand Total:</span>
                             <span class="font-bold text-indigo-600" id="grandTotal">₹0.00</span>
                         </div>
+                        <div class="flex justify-between items-center text-sm pt-2">
+                            <label for="paid_amount" class="text-gray-700 font-medium">Amount Paid:</label>
+                            <div class="flex items-center">
+                                <span class="text-gray-500 mr-1">₹</span>
+                                <input type="number" name="paid_amount" id="paid_amount" value="0" step="0.01" min="0" class="w-32 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-right text-sm" oninput="updateDueAmount()">
+                            </div>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-700 font-medium">Due Amount:</span>
+                            <span class="font-semibold text-red-600" id="dueAmount">₹0.00</span>
+                        </div>
                     </div>
                 </div>
 
@@ -1211,6 +1222,23 @@
     function updateTotal(element) {
         if (typeof invoiceForm !== 'undefined' && invoiceForm.updateTotal) {
             invoiceForm.updateTotal(element);
+        }
+    }
+
+    function updateDueAmount() {
+        const grandTotalText = document.getElementById('grandTotal').textContent;
+        const grandTotal = parseFloat(grandTotalText.replace('₹', '').replace(/,/g, '')) || 0;
+        const paidAmount = parseFloat(document.getElementById('paid_amount').value) || 0;
+        const due = Math.max(0, grandTotal - paidAmount);
+        document.getElementById('dueAmount').textContent = '₹' + due.toFixed(2);
+        // Update color based on due
+        const dueEl = document.getElementById('dueAmount');
+        if (due > 0) {
+            dueEl.classList.remove('text-green-600');
+            dueEl.classList.add('text-red-600');
+        } else {
+            dueEl.classList.remove('text-red-600');
+            dueEl.classList.add('text-green-600');
         }
     }
 

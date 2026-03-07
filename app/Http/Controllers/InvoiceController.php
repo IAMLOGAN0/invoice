@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Invoice;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Shop;
 use App\Models\Coupon;
@@ -65,6 +66,7 @@ class InvoiceController extends Controller
                 'coupon_id' => 'nullable|exists:coupons,id',
                 'flat_discount' => 'nullable|numeric|min:0',
                 'discount_amount' => 'nullable|numeric|min:0',
+                'paid_amount' => 'nullable|numeric|min:0',
                 'items' => 'required|array|min:1',
                 'items.*.product_id' => 'required|exists:products,id',
                 'items.*.quantity' => 'required|integer|min:1',
@@ -191,8 +193,13 @@ class InvoiceController extends Controller
         // Apply discount to grand total
         $grandTotal = max(0, $grandTotal - $discountAmount);
 
+        // Calculate payment amounts
+        $paidAmount = min($request->input('paid_amount', 0), $grandTotal);
+        $dueAmount = $grandTotal - $paidAmount;
+        $paymentStatus = $dueAmount <= 0 ? 'paid' : ($paidAmount > 0 ? 'partial' : 'unpaid');
+
         $invoice = null;
-        DB::transaction(function () use ($request, $shop, $customer, $subtotal, $cgst, $sgst, $igst, $grandTotal, $invoiceItems, $applyGst, $discountAmount, $discountType, $couponId, &$invoice) {
+        DB::transaction(function () use ($request, $shop, $customer, $subtotal, $cgst, $sgst, $igst, $grandTotal, $invoiceItems, $applyGst, $discountAmount, $discountType, $couponId, $paidAmount, $dueAmount, $paymentStatus, &$invoice) {
             $invoice = Invoice::create([
                 'invoice_no' => 'INV-' . time(),
                 'shop_id' => $shop->id,
@@ -207,10 +214,23 @@ class InvoiceController extends Controller
                 'coupon_id' => $couponId,
                 'discount_type' => $discountType,
                 'discount_amount' => $discountAmount,
+                'paid_amount' => $paidAmount,
+                'due_amount' => $dueAmount,
+                'payment_status' => $paymentStatus,
             ]);
 
             foreach ($invoiceItems as $itemData) {
                 $invoice->items()->create($itemData);
+            }
+
+            // Record initial payment if amount paid > 0
+            if ($paidAmount > 0) {
+                $invoice->payments()->create([
+                    'customer_id' => $customer->id,
+                    'amount' => $paidAmount,
+                    'payment_method' => 'cash',
+                    'note' => 'Initial payment on invoice creation',
+                ]);
             }
         });
         

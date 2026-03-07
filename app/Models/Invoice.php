@@ -23,11 +23,16 @@ class Invoice extends Model
         'coupon_id',
         'discount_type',
         'discount_amount',
+        'paid_amount',
+        'due_amount',
+        'payment_status',
     ];
 
     protected $casts = [
         'apply_gst' => 'boolean',
         'discount_amount' => 'decimal:2',
+        'paid_amount' => 'decimal:2',
+        'due_amount' => 'decimal:2',
     ];
 
     public function shop()
@@ -48,5 +53,10 @@ class Invoice extends Model
     public function items()
     {
         return $this->hasMany(InvoiceItem::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 }

@@ -178,6 +178,11 @@ class InvoiceForm {
         this.grandTotalElement.textContent = '₹' + this.formatCurrency(grandTotal);
         this.totalTaxElement.textContent = '₹' + this.formatCurrency(totalTax);
         this.subtotalElement.textContent = '₹' + this.formatCurrency(subtotalAmount);
+
+        // Update due amount if the function exists
+        if (typeof updateDueAmount === 'function') {
+            updateDueAmount();
+        }
     }
 
     formatCurrency(value) {

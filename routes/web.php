@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DueController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +54,11 @@ Route::middleware('auth')->group(function () {
 
     // Customer Routes
     Route::resource('customers', CustomerController::class);
+
+    // Due Payment Routes
+    Route::get('/dues', [DueController::class, 'index'])->name('dues.index');
+    Route::get('/dues/{customer}', [DueController::class, 'show'])->name('dues.show');
+    Route::post('/dues/{invoice}/settle', [DueController::class, 'settle'])->name('dues.settle');
 });
 
 require __DIR__.'/auth.php';
