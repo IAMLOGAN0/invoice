@@ -94,6 +94,7 @@
     position: absolute;
     top: calc(100% + 4px);
     left: 0;
+    right: 0;
     background-color: #ffffff;
     border: 1px solid #e5e7eb;
     border-radius: 6px;
@@ -102,7 +103,20 @@
     max-height: 320px;
     overflow-y: auto;
     display: none;
-    min-width: 280px;
+    width: 100%;
+    min-width: 220px;
+}
+
+@media (max-width: 640px) {
+    .product-select-dropdown {
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        top: auto;
+        width: auto;
+        min-width: auto;
+        max-height: 50vh;
+    }
 }
 
 /* Scrollbar styling */
@@ -807,16 +821,17 @@
                         </button>
                     </div>
 
-                    <div class="border border-gray-200 rounded-lg overflow-x-auto" style="position: relative; z-index: 0;">
+                    <!-- Desktop Table (hidden on mobile) -->
+                    <div class="hidden sm:block border border-gray-200 rounded-lg" style="position: relative; z-index: 1; overflow: visible;">
                         <table class="w-full" id="productsTable">
                             <thead class="bg-gray-50 border-b border-gray-200">
                                 <tr>
-                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase" style="min-width: 200px;">Product</th>
-                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase" style="min-width: 60px;">Qty</th>
-                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase" style="min-width: 70px;">Price</th>
-                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase" style="min-width: 60px;">Tax %</th>
-                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase" style="min-width: 70px;">Total</th>
-                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-center text-xs font-medium text-gray-500 uppercase" style="min-width: 60px;">Action</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase" style="min-width: 240px;">Product</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase" style="min-width: 60px;">Qty</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase" style="min-width: 80px;">Price</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase" style="min-width: 60px;">Tax %</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase" style="min-width: 80px;">Total</th>
+                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase" style="min-width: 60px;">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="itemsContainer">
@@ -869,18 +884,18 @@
                                                     </button>
                                                 </div>
                                             </td>
-                                            <td class="px-2 sm:px-4 py-2 sm:py-3">
-                                                <input type="number" name="items[{{ $loop->index }}][quantity]" value="{{ $item->qty }}" step="1" min="1" class="w-full h-10 sm:h-auto px-2 sm:px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 quantity-input" onchange="updateTotal(this)">
+                                            <td class="px-4 py-3">
+                                                <input type="number" name="items[{{ $loop->index }}][quantity]" value="{{ $item->qty }}" step="1" min="1" class="w-full px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 quantity-input" onchange="updateTotal(this)">
                                             </td>
-                                            <td class="px-2 sm:px-4 py-2 sm:py-3">
-                                                <input type="number" name="items[{{ $loop->index }}][unit_price]" value="{{ $item->price }}" step="0.01" min="0" class="w-full h-10 sm:h-auto px-2 sm:px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 price-input" onchange="updateTotal(this)">
+                                            <td class="px-4 py-3">
+                                                <input type="number" name="items[{{ $loop->index }}][unit_price]" value="{{ $item->price }}" step="0.01" min="0" class="w-full px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 price-input" onchange="updateTotal(this)">
                                             </td>
-                                            <td class="px-2 sm:px-4 py-2 sm:py-3">
-                                                <input type="number" name="items[{{ $loop->index }}][tax_rate]" value="{{ $item->gst_amount / $item->total * 100 ?? 0 }}" step="0.01" min="0" max="100" class="w-full h-10 sm:h-auto px-2 sm:px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 tax-input" onchange="updateTotal(this)">
+                                            <td class="px-4 py-3">
+                                                <input type="number" name="items[{{ $loop->index }}][tax_rate]" value="{{ $item->gst_amount / $item->total * 100 ?? 0 }}" step="0.01" min="0" max="100" class="w-full px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 tax-input" onchange="updateTotal(this)">
                                             </td>
-                                            <td class="px-2 sm:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-gray-900 row-total">₹{{ number_format($item->total, 2) }}</td>
-                                            <td class="px-2 sm:px-4 py-2 sm:py-3 text-center">
-                                                <button type="button" onclick="removeProductRow(this)" class="text-red-600 hover:text-red-900 text-xs sm:text-sm whitespace-nowrap">Remove</button>
+                                            <td class="px-4 py-3 text-right font-semibold text-sm text-gray-900 row-total">₹{{ number_format($item->total, 2) }}</td>
+                                            <td class="px-4 py-3 text-center">
+                                                <button type="button" onclick="removeProductRow(this)" class="text-red-600 hover:text-red-900 text-sm">Remove</button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -932,23 +947,156 @@
                                             </button>
                                         </div>
                                         </td>
-                                        <td class="px-2 sm:px-4 py-2 sm:py-3">
-                                            <input type="number" name="items[0][quantity]" value="1" step="1" min="1" class="w-full h-10 sm:h-auto px-2 sm:px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 quantity-input" onchange="updateTotal(this)">
+                                        <td class="px-4 py-3">
+                                            <input type="number" name="items[0][quantity]" value="1" step="1" min="1" class="w-full px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 quantity-input" onchange="updateTotal(this)">
                                         </td>
-                                        <td class="px-2 sm:px-4 py-2 sm:py-3">
-                                            <input type="number" name="items[0][unit_price]" value="0" step="0.01" min="0" class="w-full h-10 sm:h-auto px-2 sm:px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 price-input" onchange="updateTotal(this)">
+                                        <td class="px-4 py-3">
+                                            <input type="number" name="items[0][unit_price]" value="0" step="0.01" min="0" class="w-full px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 price-input" onchange="updateTotal(this)">
                                         </td>
-                                        <td class="px-2 sm:px-4 py-2 sm:py-3">
-                                            <input type="number" name="items[0][tax_rate]" value="0" step="0.01" min="0" max="100" class="w-full h-10 sm:h-auto px-2 sm:px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 tax-input" onchange="updateTotal(this)">
+                                        <td class="px-4 py-3">
+                                            <input type="number" name="items[0][tax_rate]" value="0" step="0.01" min="0" max="100" class="w-full px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 tax-input" onchange="updateTotal(this)">
                                         </td>
-                                        <td class="px-2 sm:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-gray-900 row-total">₹0.00</td>
-                                        <td class="px-2 sm:px-4 py-2 sm:py-3 text-center">
-                                            <button type="button" onclick="removeProductRow(this)" class="text-red-600 hover:text-red-900 text-xs sm:text-sm whitespace-nowrap">Remove</button>
+                                        <td class="px-4 py-3 text-right font-semibold text-sm text-gray-900 row-total">₹0.00</td>
+                                        <td class="px-4 py-3 text-center">
+                                            <button type="button" onclick="removeProductRow(this)" class="text-red-600 hover:text-red-900 text-sm">Remove</button>
                                         </td>
                                     </tr>
                                 @endif
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Mobile Card Layout (visible only on mobile) -->
+                    <div class="sm:hidden space-y-4" id="mobileItemsContainer">
+                        @if(isset($invoice))
+                            @foreach($invoice->items as $item)
+                                <div class="border border-gray-200 rounded-lg p-3 bg-white product-card" data-index="{{ $loop->index }}">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <label class="text-xs font-semibold text-gray-500 uppercase">Product</label>
+                                        <button type="button" onclick="removeProductCard(this)" class="text-red-500 hover:text-red-700 p-1">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                        </button>
+                                    </div>
+                                    <div class="flex gap-2 items-start mb-3">
+                                        <div class="product-select-wrapper flex-1">
+                                            <input type="hidden" name="items[{{ $loop->index }}][product_id]" class="product-select-input mobile-product-input" value="{{ $item->product_id }}" onchange="updateTotal(this)">
+                                            <div class="product-select-header" data-index="{{ $loop->index }}" onclick="toggleProductSelect(this)">
+                                                <span class="product-select-value placeholder">Select product...</span>
+                                                <div class="product-select-icons">
+                                                    <button type="button" class="product-select-clear" onclick="clearProductSelect(event, this)">
+                                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                                    </button>
+                                                    <span class="product-select-arrow">
+                                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="product-select-dropdown">
+                                                <div class="product-select-search">
+                                                    <input type="text" placeholder="Search products..." class="product-search-input" onkeyup="filterProducts(this)">
+                                                </div>
+                                                <div class="product-select-options">
+                                                    @foreach($products as $product)
+                                                        <button type="button" class="product-select-option" data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}" data-product-hsn="{{ $product->hsn_code }}" data-product-price="{{ $product->price }}" data-product-gst="{{ $product->gst_percentage }}" onclick="selectProduct(event, this)">
+                                                            <div class="product-select-option-main">
+                                                                <span class="product-select-option-name">{{ $product->name }}</span>
+                                                                @if($product->hsn_code)
+                                                                    <span class="product-select-option-hsn">{{ $product->hsn_code }}</span>
+                                                                @endif
+                                                            </div>
+                                                            <span class="product-select-checkmark">✓</span>
+                                                        </button>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="button" onclick="openProductModal(this)" class="px-3 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition" title="Add new product">
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+                                        </button>
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-2 mb-2">
+                                        <div>
+                                            <label class="text-xs text-gray-500 font-medium">Qty</label>
+                                            <input type="number" name="items[{{ $loop->index }}][quantity]" value="{{ $item->qty }}" step="1" min="1" class="w-full h-10 px-2 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 quantity-input" onchange="updateTotal(this)">
+                                        </div>
+                                        <div>
+                                            <label class="text-xs text-gray-500 font-medium">Price (₹)</label>
+                                            <input type="number" name="items[{{ $loop->index }}][unit_price]" value="{{ $item->price }}" step="0.01" min="0" class="w-full h-10 px-2 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 price-input" onchange="updateTotal(this)">
+                                        </div>
+                                        <div>
+                                            <label class="text-xs text-gray-500 font-medium">Tax %</label>
+                                            <input type="number" name="items[{{ $loop->index }}][tax_rate]" value="{{ $item->gst_amount / $item->total * 100 ?? 0 }}" step="0.01" min="0" max="100" class="w-full h-10 px-2 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 tax-input" onchange="updateTotal(this)">
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-end">
+                                        <span class="text-sm font-semibold text-gray-900 row-total">Total: ₹{{ number_format($item->total, 2) }}</span>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="border border-gray-200 rounded-lg p-3 bg-white product-card" data-index="0">
+                                <div class="flex justify-between items-start mb-3">
+                                    <label class="text-xs font-semibold text-gray-500 uppercase">Product</label>
+                                    <button type="button" onclick="removeProductCard(this)" class="text-red-500 hover:text-red-700 p-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                    </button>
+                                </div>
+                                <div class="flex gap-2 items-start mb-3">
+                                    <div class="product-select-wrapper flex-1">
+                                        <input type="hidden" name="items[0][product_id]" class="product-select-input mobile-product-input" value="" onchange="updateTotal(this)">
+                                        <div class="product-select-header" data-index="0" onclick="toggleProductSelect(this)">
+                                            <span class="product-select-value placeholder">Select product...</span>
+                                            <div class="product-select-icons">
+                                                <button type="button" class="product-select-clear" onclick="clearProductSelect(event, this)">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                                </button>
+                                                <span class="product-select-arrow">
+                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="product-select-dropdown">
+                                            <div class="product-select-search">
+                                                <input type="text" placeholder="Search products..." class="product-search-input" onkeyup="filterProducts(this)">
+                                            </div>
+                                            <div class="product-select-options">
+                                                @foreach($products as $product)
+                                                    <button type="button" class="product-select-option" data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}" data-product-hsn="{{ $product->hsn_code }}" data-product-price="{{ $product->price }}" data-product-gst="{{ $product->gst_percentage }}" onclick="selectProduct(event, this)">
+                                                        <div class="product-select-option-main">
+                                                            <span class="product-select-option-name">{{ $product->name }}</span>
+                                                            @if($product->hsn_code)
+                                                                <span class="product-select-option-hsn">{{ $product->hsn_code }}</span>
+                                                            @endif
+                                                        </div>
+                                                        <span class="product-select-checkmark">✓</span>
+                                                    </button>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" onclick="openProductModal(this)" class="px-3 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition" title="Add new product">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+                                    </button>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2 mb-2">
+                                    <div>
+                                        <label class="text-xs text-gray-500 font-medium">Qty</label>
+                                        <input type="number" name="items[0][quantity]" value="1" step="1" min="1" class="w-full h-10 px-2 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 quantity-input" onchange="updateTotal(this)">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs text-gray-500 font-medium">Price (₹)</label>
+                                        <input type="number" name="items[0][unit_price]" value="0" step="0.01" min="0" class="w-full h-10 px-2 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 price-input" onchange="updateTotal(this)">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs text-gray-500 font-medium">Tax %</label>
+                                        <input type="number" name="items[0][tax_rate]" value="0" step="0.01" min="0" max="100" class="w-full h-10 px-2 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 tax-input" onchange="updateTotal(this)">
+                                    </div>
+                                </div>
+                                <div class="flex justify-end">
+                                    <span class="text-sm font-semibold text-gray-900 row-total">Total: ₹0.00</span>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
 
@@ -1294,6 +1442,48 @@
         }
     }
 
+    // Global wrapper for removing a desktop table row
+    function removeProductRow(button) {
+        if (typeof invoiceForm !== 'undefined' && invoiceForm.removeProductRow) {
+            invoiceForm.removeProductRow(button);
+        }
+    }
+
+    // Global function for removing a mobile card
+    function removeProductCard(button) {
+        const card = button.closest('.product-card');
+        const container = document.getElementById('mobileItemsContainer');
+        if (container && container.querySelectorAll('.product-card').length > 1) {
+            card.remove();
+            if (typeof invoiceForm !== 'undefined') {
+                invoiceForm.updateGrandTotal();
+            }
+        } else {
+            alert('At least one item is required');
+        }
+    }
+
+    // Before form submit, disable inputs from the hidden layout to avoid duplicates
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function() {
+                const isMobile = window.innerWidth < 640;
+                if (isMobile) {
+                    // Disable desktop table inputs
+                    document.querySelectorAll('#itemsContainer input, #itemsContainer select').forEach(function(el) {
+                        el.disabled = true;
+                    });
+                } else {
+                    // Disable mobile card inputs
+                    document.querySelectorAll('#mobileItemsContainer input, #mobileItemsContainer select').forEach(function(el) {
+                        el.disabled = true;
+                    });
+                }
+            });
+        }
+    });
+
     function updateDueAmount() {
         const grandTotalText = document.getElementById('grandTotal').textContent;
         const grandTotal = parseFloat(grandTotalText.replace('₹', '').replace(/,/g, '')) || 0;
@@ -1464,6 +1654,12 @@
         } else {
             dropdown.classList.add('open');
             headerElement.classList.add('focused');
+            
+            // On mobile, position fixed dropdown below the header
+            if (window.innerWidth <= 640) {
+                const rect = headerElement.getBoundingClientRect();
+                dropdown.style.top = (rect.bottom + 4) + 'px';
+            }
             
             // Focus search input
             const searchInput = dropdown.querySelector('.product-search-input');
