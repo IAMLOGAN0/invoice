@@ -33,52 +33,19 @@
                 </div>
 
                 <div>
-                    <label for="hsn_code" class="block text-sm font-medium text-gray-900 mb-2">HSN Code</label>
+                    <label for="price" class="block text-sm font-medium text-gray-900 mb-2">Price</label>
                     <input 
-                        type="text" 
-                        name="hsn_code" 
-                        id="hsn_code" 
-                        placeholder="Enter HSN code"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('hsn_code') border-red-500 @enderror"
-                        value="{{ old('hsn_code') }}"
+                        type="number" 
+                        name="price" 
+                        id="price" 
+                        placeholder="0.00"
+                        step="0.01"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('price') border-red-500 @enderror"
+                        value="{{ old('price') }}"
                     >
-                    @error('hsn_code')
+                    @error('price')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
-                </div>
-
-                <div class="grid grid-cols-2 gap-6">
-                    <div>
-                        <label for="price" class="block text-sm font-medium text-gray-900 mb-2">Price</label>
-                        <input 
-                            type="number" 
-                            name="price" 
-                            id="price" 
-                            placeholder="0.00"
-                            step="0.01"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('price') border-red-500 @enderror"
-                            value="{{ old('price') }}"
-                        >
-                        @error('price')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="gst_percentage" class="block text-sm font-medium text-gray-900 mb-2">GST Percentage</label>
-                        <input 
-                            type="number" 
-                            name="gst_percentage" 
-                            id="gst_percentage" 
-                            placeholder="0"
-                            step="0.01"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('gst_percentage') border-red-500 @enderror"
-                            value="{{ old('gst_percentage') }}"
-                        >
-                        @error('gst_percentage')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
                 </div>
 
                 <div class="flex space-x-4 pt-4">

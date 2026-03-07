@@ -21,7 +21,7 @@
         </a>
     </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col" style="height: 500px;">
         <div class="overflow-x-auto overflow-y-auto flex-1">
             <table class="w-full">
                 <thead>

@@ -22,10 +22,14 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'hsn_code' => 'required|string|max:50',
             'price' => 'required|numeric|min:0',
-            'gst_percentage' => 'required|numeric|min:0|max:100',
         ]);
+
+        // Auto-generate HSN code
+        $validated['hsn_code'] = $this->generateHsnCode();
+        
+        // Set default GST percentage to 0
+        $validated['gst_percentage'] = 0;
 
         Product::create($validated);
 
@@ -41,10 +45,12 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'hsn_code' => 'required|string|max:50',
             'price' => 'required|numeric|min:0',
-            'gst_percentage' => 'required|numeric|min:0|max:100',
         ]);
+
+        // Keep the existing HSN code and GST percentage
+        $validated['hsn_code'] = $product->hsn_code;
+        $validated['gst_percentage'] = $product->gst_percentage;
 
         $product->update($validated);
 
@@ -56,5 +62,18 @@ class ProductController extends Controller
         $product->delete();
 
         return redirect()->route('products.index')->with('success', 'Product deleted successfully');
+    }
+
+    /**
+     * Generate a unique HSN code
+     * HSN codes are 8-digit numbers
+     */
+    private function generateHsnCode()
+    {
+        do {
+            $code = str_pad(rand(10000000, 99999999), 8, '0', STR_PAD_LEFT);
+        } while (Product::where('hsn_code', $code)->exists());
+
+        return $code;
     }
 }

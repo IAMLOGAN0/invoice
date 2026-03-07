@@ -14,11 +14,16 @@ class Invoice extends Model
         'shop_id',
         'customer_id',
         'invoice_date',
+        'apply_gst',
         'subtotal',
         'cgst',
         'sgst',
         'igst',
         'grand_total',
+    ];
+
+    protected $casts = [
+        'apply_gst' => 'boolean',
     ];
 
     public function shop()

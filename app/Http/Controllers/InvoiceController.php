@@ -58,6 +58,7 @@ class InvoiceController extends Controller
                 'customer_gstin' => 'nullable|string|max:20',
                 'customer_state_code' => 'nullable|string|max:2',
                 'invoice_date' => 'required|date',
+                'apply_gst' => 'boolean',
                 'items' => 'required|array|min:1',
                 'items.*.product_id' => 'required|exists:products,id',
                 'items.*.quantity' => 'required|integer|min:1',
@@ -100,8 +101,12 @@ class InvoiceController extends Controller
                 'product' => Product::findOrFail($item['product_id']),
                 'qty' => $item['quantity'],
                 'unit_price' => $item['unit_price'],
+                'tax_rate' => $item['tax_rate'] ?? 0,
             ];
         });
+
+        // Get the apply_gst flag
+        $applyGst = $request->has('apply_gst') ? 1 : 0;
 
         // Calculate using the form's unit prices instead of product prices
         $subtotal = 0;
@@ -112,7 +117,7 @@ class InvoiceController extends Controller
             $product = $item['product'];
             $qty = $item['qty'];
             $price = $item['unit_price'];
-            $gstPercentage = $product->gst_percentage ?? 0;
+            $gstPercentage = $applyGst ? ($item['tax_rate'] ?? 0) : 0;
 
             $itemTotal = $price * $qty;
             $gstAmount = ($itemTotal * $gstPercentage) / 100;
@@ -133,22 +138,26 @@ class InvoiceController extends Controller
         $sgst = 0;
         $igst = 0;
 
-        if ($shop->state_code === $customer->state_code) {
-            $cgst = $totalGst / 2;
-            $sgst = $totalGst / 2;
-        } else {
-            $igst = $totalGst;
+        // Only calculate CGST, SGST, IGST if GST is applied
+        if ($applyGst) {
+            if ($shop->state_code === $customer->state_code) {
+                $cgst = $totalGst / 2;
+                $sgst = $totalGst / 2;
+            } else {
+                $igst = $totalGst;
+            }
         }
 
         $grandTotal = $subtotal + $totalGst;
 
         $invoice = null;
-        DB::transaction(function () use ($request, $shop, $customer, $subtotal, $cgst, $sgst, $igst, $grandTotal, $invoiceItems, &$invoice) {
+        DB::transaction(function () use ($request, $shop, $customer, $subtotal, $cgst, $sgst, $igst, $grandTotal, $invoiceItems, $applyGst, &$invoice) {
             $invoice = Invoice::create([
                 'invoice_no' => 'INV-' . time(),
                 'shop_id' => $shop->id,
                 'customer_id' => $customer->id,
                 'invoice_date' => $request->invoice_date,
+                'apply_gst' => $applyGst,
                 'subtotal' => $subtotal,
                 'cgst' => $cgst,
                 'sgst' => $sgst,

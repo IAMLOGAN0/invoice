@@ -9,7 +9,10 @@ export default defineConfig({
                 'resources/js/app.js',
                 'resources/js/invoice-form.js',
             ],
-            refresh: true,
+            refresh: [
+                'resources/views/**',
+                'app/Http/Controllers/**',
+            ],
         }),
     ],
 });

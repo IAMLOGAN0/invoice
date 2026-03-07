@@ -343,6 +343,23 @@
                         @enderror
                     </div>
                 </div>
+
+                <!-- Apply GST Option -->
+                <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <label class="flex items-center space-x-3 cursor-pointer">
+                        <input 
+                            type="checkbox" 
+                            name="apply_gst" 
+                            id="apply_gst" 
+                            value="1"
+                            {{ isset($invoice) && !$invoice->apply_gst ? '' : 'checked' }}
+                            class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 transition"
+                            onchange="toggleGstTaxColumn()"
+                        >
+                        <span class="text-sm font-medium text-gray-900">Apply GST Tax</span>
+                    </label>
+                    <p class="text-xs text-gray-600 mt-2">Enable this to automatically calculate GST tax. Uncheck for non-taxable invoices.</p>
+                </div>
                 <div class="mb-6">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-lg font-semibold text-gray-900">Line Items</h2>
@@ -736,6 +753,34 @@
                 }
             }
         });
+    });
+
+    // Toggle GST Tax Column Visibility
+    function toggleGstTaxColumn() {
+        const applyGst = document.getElementById('apply_gst').checked;
+        const taxCells = document.querySelectorAll('th:nth-child(4), td:nth-child(4)');
+        
+        if (applyGst) {
+            // Show tax column
+            taxCells.forEach(cell => {
+                cell.style.display = '';
+            });
+        } else {
+            // Hide tax column
+            taxCells.forEach(cell => {
+                cell.style.display = 'none';
+            });
+        }
+        
+        // Recalculate totals
+        if (typeof invoiceForm !== 'undefined') {
+            invoiceForm.updateGrandTotal();
+        }
+    }
+
+    // Initialize tax column visibility on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        toggleGstTaxColumn();
     });
 </script>
 
