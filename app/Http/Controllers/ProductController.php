@@ -20,20 +20,56 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-        ]);
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'price' => 'required|numeric|min:0',
+            ]);
 
-        // Auto-generate HSN code
-        $validated['hsn_code'] = $this->generateHsnCode();
-        
-        // Set default GST percentage to 0
-        $validated['gst_percentage'] = 0;
+            // Auto-generate HSN code
+            $validated['hsn_code'] = $this->generateHsnCode();
+            
+            // Set default GST percentage to 0
+            $validated['gst_percentage'] = 0;
 
-        Product::create($validated);
+            $product = Product::create($validated);
 
-        return redirect()->route('products.index')->with('success', 'Product created successfully');
+            // Return JSON if AJAX request
+            if ($request->ajax() || $request->expectsJson() || $request->header('Content-Type') === 'application/json') {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Product created successfully',
+                    'product' => [
+                        'id' => $product->id,
+                        'name' => $product->name,
+                        'price' => (float) $product->price,
+                        'hsn_code' => $product->hsn_code,
+                        'gst_percentage' => (float) $product->gst_percentage,
+                    ]
+                ], 200);
+            }
+
+            return redirect()->route('products.index')->with('success', 'Product created successfully');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Return JSON for AJAX requests
+            if ($request->ajax() || $request->expectsJson() || $request->header('Content-Type') === 'application/json') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation error',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            throw $e;
+        } catch (\Exception $e) {
+            // Return JSON for AJAX requests
+            if ($request->ajax() || $request->expectsJson() || $request->header('Content-Type') === 'application/json') {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ], 500);
+            }
+            throw $e;
+        }
     }
 
     public function edit(Product $product)

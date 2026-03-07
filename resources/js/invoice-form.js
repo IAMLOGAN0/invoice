@@ -43,32 +43,39 @@ class InvoiceForm {
         
         newRow.innerHTML = `
             <td class="px-4 py-3">
-                <div class="product-select-wrapper">
-                    <input type="hidden" name="items[${this.rowCount}][product_id]" class="product-select-input" value="" onchange="invoiceForm.handleProductChange(this)">
-                    <div class="product-select-header" data-index="${this.rowCount}" onclick="toggleProductSelect(this)">
-                        <span class="product-select-value placeholder">Select product...</span>
-                        <div class="product-select-icons">
-                            <button type="button" class="product-select-clear" onclick="clearProductSelect(event, this)">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                                </svg>
-                            </button>
-                            <span class="product-select-arrow">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </span>
+                <div class="flex gap-2 items-start">
+                    <div class="product-select-wrapper flex-1">
+                        <input type="hidden" name="items[${this.rowCount}][product_id]" class="product-select-input" value="" onchange="invoiceForm.handleProductChange(this)">
+                        <div class="product-select-header" data-index="${this.rowCount}" onclick="toggleProductSelect(this)">
+                            <span class="product-select-value placeholder">Select product...</span>
+                            <div class="product-select-icons">
+                                <button type="button" class="product-select-clear" onclick="clearProductSelect(event, this)">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </button>
+                                <span class="product-select-arrow">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="product-select-dropdown">
+                            <div class="product-select-search">
+                                <input type="text" placeholder="Search products..." class="product-search-input" onkeyup="filterProducts(this)">
+                            </div>
+                            <div class="product-select-options">
+                                ${this.getCustomProductOptions()}
+                            </div>
                         </div>
                     </div>
-                    <div class="product-select-dropdown">
-                        <div class="product-select-search">
-                            <input type="text" placeholder="Search products..." class="product-search-input" onkeyup="filterProducts(this)">
-                        </div>
-                        <div class="product-select-options">
-                            ${this.getCustomProductOptions()}
-                        </div>
-                    </div>
+                    <button type="button" onclick="openProductModal(this)" class="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition whitespace-nowrap font-medium text-sm" title="Add new product">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
                 </div>
             </td>
             <td class="px-4 py-3 w-16">

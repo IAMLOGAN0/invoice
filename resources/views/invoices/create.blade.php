@@ -94,7 +94,6 @@
     position: absolute;
     top: calc(100% + 4px);
     left: 0;
-    right: 0;
     background-color: #ffffff;
     border: 1px solid #e5e7eb;
     border-radius: 6px;
@@ -103,7 +102,7 @@
     max-height: 320px;
     overflow-y: auto;
     display: none;
-    min-width: 100%;
+    min-width: 280px;
 }
 
 /* Scrollbar styling */
@@ -195,6 +194,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    min-width: 0;
 }
 
 .product-select-option-hsn {
@@ -221,6 +221,210 @@
 }
 
 .product-select-option.selected .product-select-checkmark {
+    display: inline;
+}
+
+/* Custom Customer Select Styles */
+.customer-select-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: visible;
+}
+
+.customer-select-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background-color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 42px;
+}
+
+.customer-select-header:hover {
+    border-color: #d1d5db;
+}
+
+.customer-select-header.focused {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    outline: none;
+}
+
+.customer-select-value {
+    flex: 1;
+    color: #374151;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.customer-select-value.placeholder {
+    color: #9ca3af;
+}
+
+.customer-select-icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 8px;
+}
+
+.customer-select-clear {
+    display: none;
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #9ca3af;
+    transition: color 0.2s;
+}
+
+.customer-select-clear:hover {
+    color: #6b7280;
+}
+
+.customer-select-clear.visible {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.customer-select-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: #6b7280;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+}
+
+.customer-select-header.open .customer-select-arrow {
+    transform: rotate(180deg);
+}
+
+.customer-select-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    z-index: 9999;
+    max-height: 320px;
+    overflow-y: auto;
+    display: none;
+}
+
+.customer-select-dropdown::-webkit-scrollbar {
+    width: 8px;
+}
+
+.customer-select-dropdown::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.customer-select-dropdown::-webkit-scrollbar-thumb {
+    background-color: #d1d5db;
+    border-radius: 4px;
+}
+
+.customer-select-dropdown {
+    scrollbar-color: #d1d5db transparent;
+    scrollbar-width: thin;
+}
+
+.customer-select-dropdown.open {
+    display: block;
+}
+
+.customer-select-search {
+    position: sticky;
+    top: 0;
+    padding: 8px;
+    background-color: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.customer-select-search input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.customer-select-search input:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+}
+
+.customer-select-options {
+    padding: 4px 0;
+}
+
+.customer-select-option {
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: background-color 0.15s;
+    border: none;
+    width: 100%;
+    text-align: left;
+    background: none;
+    font-size: 14px;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.customer-select-option:hover {
+    background-color: #f3f4f6;
+}
+
+.customer-select-option.selected {
+    background-color: #eef2ff;
+    color: #4f46e5;
+    font-weight: 500;
+}
+
+.customer-select-option-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.customer-select-option-phone {
+    font-size: 12px;
+    color: #9ca3af;
+    white-space: nowrap;
+    margin-left: 8px;
+}
+
+.customer-select-option.selected .customer-select-option-phone {
+    color: #818cf8;
+}
+
+.customer-select-checkmark {
+    display: none;
+    color: #4f46e5;
+    font-weight: bold;
+    margin-left: 8px;
+}
+
+.customer-select-option.selected .customer-select-checkmark {
     display: inline;
 }
 
@@ -472,15 +676,42 @@
 
                     <!-- Existing Customer -->
                     <div id="existingCustomerMode">
-                        <label for="customer_id" class="block font-medium text-sm text-gray-700 mb-2">Customer</label>
-                        <select name="customer_id" id="customer_id" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                            <option value="">Select a customer...</option>
-                            @foreach($customers as $customer)
-                                <option value="{{ $customer->id }}" {{ isset($invoice) && $invoice->customer_id == $customer->id ? 'selected' : '' }}>
-                                    {{ $customer->name }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <label class="block font-medium text-sm text-gray-700 mb-2">Customer</label>
+                        <div class="customer-select-wrapper">
+                            <input type="hidden" name="customer_id" id="customer_id" value="{{ isset($invoice) ? $invoice->customer_id : '' }}">
+                            <div class="customer-select-header" onclick="toggleCustomerSelect(this)">
+                                <span class="customer-select-value placeholder">Select a customer...</span>
+                                <div class="customer-select-icons">
+                                    <button type="button" class="customer-select-clear" onclick="clearCustomerSelect(event)">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                                        </svg>
+                                    </button>
+                                    <span class="customer-select-arrow">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="customer-select-dropdown">
+                                <div class="customer-select-search">
+                                    <input type="text" placeholder="Search customers..." class="customer-search-input" onkeyup="filterCustomers(this)">
+                                </div>
+                                <div class="customer-select-options">
+                                    @foreach($customers as $customer)
+                                        <button type="button" class="customer-select-option" data-customer-id="{{ $customer->id }}" data-customer-name="{{ $customer->name }}" data-customer-phone="{{ $customer->phone }}" onclick="selectCustomerOption(event, this)">
+                                            <span class="customer-select-option-name">{{ $customer->name }}</span>
+                                            @if($customer->phone)
+                                                <span class="customer-select-option-phone">{{ $customer->phone }}</span>
+                                            @endif
+                                            <span class="customer-select-checkmark">✓</span>
+                                        </button>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
                         @error('customer_id')
                             <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -580,7 +811,7 @@
                         <table class="w-full" id="productsTable">
                             <thead class="bg-gray-50 border-b border-gray-200">
                                 <tr>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase" style="min-width: 240px;">Product</th>
                                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-16">Quantity</th>
                                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Unit Price</th>
                                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-28">Tax (%)</th>
@@ -593,42 +824,49 @@
                                     @foreach($invoice->items as $item)
                                         <tr class="border-b border-gray-200 product-row">
                                             <td class="px-4 py-3">
-                                                <div class="product-select-wrapper">
-                                                    <input type="hidden" name="items[{{ $loop->index }}][product_id]" class="product-select-input" value="{{ $item->product_id }}" onchange="updateTotal(this)">
-                                                    <div class="product-select-header" data-index="{{ $loop->index }}" onclick="toggleProductSelect(this)">
-                                                        <span class="product-select-value placeholder">Select product...</span>
-                                                        <div class="product-select-icons">
-                                                            <button type="button" class="product-select-clear" onclick="clearProductSelect(event, this)">
-                                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                                                                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                                                                </svg>
-                                                            </button>
-                                                            <span class="product-select-arrow">
-                                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                                                </svg>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="product-select-dropdown">
-                                                        <div class="product-select-search">
-                                                            <input type="text" placeholder="Search products..." class="product-search-input" onkeyup="filterProducts(this)">
-                                                        </div>
-                                                        <div class="product-select-options">
-                                                            @foreach($products as $product)
-                                                                <button type="button" class="product-select-option" data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}" data-product-hsn="{{ $product->hsn_code }}" data-product-price="{{ $product->price }}" data-product-gst="{{ $product->gst_percentage }}" onclick="selectProduct(event, this)">
-                                                                    <div class="product-select-option-main">
-                                                                        <span class="product-select-option-name">{{ $product->name }}</span>
-                                                                        @if($product->hsn_code)
-                                                                            <span class="product-select-option-hsn">{{ $product->hsn_code }}</span>
-                                                                        @endif
-                                                                    </div>
-                                                                    <span class="product-select-checkmark">✓</span>
+                                                <div class="flex gap-2 items-start">
+                                                    <div class="product-select-wrapper flex-1">
+                                                        <input type="hidden" name="items[{{ $loop->index }}][product_id]" class="product-select-input" value="{{ $item->product_id }}" onchange="updateTotal(this)">
+                                                        <div class="product-select-header" data-index="{{ $loop->index }}" onclick="toggleProductSelect(this)">
+                                                            <span class="product-select-value placeholder">Select product...</span>
+                                                            <div class="product-select-icons">
+                                                                <button type="button" class="product-select-clear" onclick="clearProductSelect(event, this)">
+                                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                                                    </svg>
                                                                 </button>
-                                                            @endforeach
+                                                                <span class="product-select-arrow">
+                                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                                                    </svg>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="product-select-dropdown">
+                                                            <div class="product-select-search">
+                                                                <input type="text" placeholder="Search products..." class="product-search-input" onkeyup="filterProducts(this)">
+                                                            </div>
+                                                            <div class="product-select-options">
+                                                                @foreach($products as $product)
+                                                                    <button type="button" class="product-select-option" data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}" data-product-hsn="{{ $product->hsn_code }}" data-product-price="{{ $product->price }}" data-product-gst="{{ $product->gst_percentage }}" onclick="selectProduct(event, this)">
+                                                                        <div class="product-select-option-main">
+                                                                            <span class="product-select-option-name">{{ $product->name }}</span>
+                                                                            @if($product->hsn_code)
+                                                                                <span class="product-select-option-hsn">{{ $product->hsn_code }}</span>
+                                                                            @endif
+                                                                        </div>
+                                                                        <span class="product-select-checkmark">✓</span>
+                                                                    </button>
+                                                                @endforeach
+                                                            </div>
                                                         </div>
                                                     </div>
+                                                    <button type="button" onclick="openProductModal(this)" class="px-3 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition whitespace-nowrap font-medium text-sm" title="Add new product">
+                                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                    </button>
                                                 </div>
                                             </td>
                                             <td class="px-4 py-3 w-16">
@@ -649,28 +887,29 @@
                                 @else
                                     <tr class="border-b border-gray-200 product-row">
                                         <td class="px-4 py-3">
-                                            <div class="product-select-wrapper">
-                                                <input type="hidden" name="items[0][product_id]" class="product-select-input" value="" onchange="updateTotal(this)">
-                                                <div class="product-select-header" data-index="0" onclick="toggleProductSelect(this)">
-                                                    <span class="product-select-value placeholder">Select product...</span>
-                                                    <div class="product-select-icons">
-                                                        <button type="button" class="product-select-clear" onclick="clearProductSelect(event, this)">
-                                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                                                            </svg>
-                                                        </button>
-                                                        <span class="product-select-arrow">
-                                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                                <polyline points="6 9 12 15 18 9"></polyline>
-                                                            </svg>
-                                                        </span>
+                                            <div class="flex gap-2 items-start">
+                                                <div class="product-select-wrapper flex-1">
+                                                    <input type="hidden" name="items[0][product_id]" class="product-select-input" value="" onchange="updateTotal(this)">
+                                                    <div class="product-select-header" data-index="0" onclick="toggleProductSelect(this)">
+                                                        <span class="product-select-value placeholder">Select product...</span>
+                                                        <div class="product-select-icons">
+                                                            <button type="button" class="product-select-clear" onclick="clearProductSelect(event, this)">
+                                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                                                </svg>
+                                                            </button>
+                                                            <span class="product-select-arrow">
+                                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                                                </svg>
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="product-select-dropdown">
-                                                    <div class="product-select-search">
-                                                        <input type="text" placeholder="Search products..." class="product-search-input" onkeyup="filterProducts(this)">
-                                                    </div>
+                                                    <div class="product-select-dropdown">
+                                                        <div class="product-select-search">
+                                                            <input type="text" placeholder="Search products..." class="product-search-input" onkeyup="filterProducts(this)">
+                                                        </div>
                                                     <div class="product-select-options">
                                                         @foreach($products as $product)
                                                             <button type="button" class="product-select-option" data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}" data-product-hsn="{{ $product->hsn_code }}" data-product-price="{{ $product->price }}" data-product-gst="{{ $product->gst_percentage }}" onclick="selectProduct(event, this)">
@@ -686,6 +925,12 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <button type="button" onclick="openProductModal(this)" class="px-3 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition whitespace-nowrap font-medium text-sm" title="Add new product">
+                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                                                </svg>
+                                            </button>
+                                        </div>
                                         </td>
                                         <td class="px-4 py-3 w-16">
                                             <input type="number" name="items[0][quantity]" value="1" step="1" min="1" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 quantity-input" onchange="updateTotal(this)">
@@ -899,10 +1144,75 @@
     </div>
 </div>
 
+<!-- Product Creation Modal -->
+<div id="productModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md mx-4">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold text-gray-900">Add New Product</h3>
+            <button type="button" onclick="closeProductModal()" class="text-gray-400 hover:text-gray-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        <form id="productModalForm" onsubmit="submitProductModal(event)" class="space-y-4">
+            <div>
+                <label for="productName" class="block text-sm font-medium text-gray-700 mb-1">Product Name <span class="text-red-600">*</span></label>
+                <input 
+                    type="text" 
+                    id="productName" 
+                    name="name"
+                    placeholder="Enter product name"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+                    required
+                >
+            </div>
+
+            <div>
+                <label for="productPrice" class="block text-sm font-medium text-gray-700 mb-1">Price (₹) <span class="text-red-600">*</span></label>
+                <input 
+                    type="number" 
+                    id="productPrice" 
+                    name="price"
+                    placeholder="0.00"
+                    step="0.01"
+                    min="0"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+                    required
+                >
+            </div>
+
+            <div class="flex gap-2 pt-4">
+                <button 
+                    type="button" 
+                    onclick="closeProductModal()"
+                    class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 font-medium transition"
+                >
+                    Cancel
+                </button>
+                <button 
+                    type="submit"
+                    class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition"
+                >
+                    Add Product
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
     // Pass data to invoice-form.js
     window.invoiceRowCount = {{ isset($invoice) ? count($invoice->items) : 1 }};
     window.invoiceProducts = @json($products);
+
+    // Global wrapper function for updateTotal (called from inline onchange handlers)
+    function updateTotal(element) {
+        if (typeof invoiceForm !== 'undefined' && invoiceForm.updateTotal) {
+            invoiceForm.updateTotal(element);
+        }
+    }
 
     function toggleCustomerMode() {
         const isNew = document.getElementById('customerTypeNew').checked;
@@ -911,7 +1221,16 @@
         
         // Clear validation on fields not in use
         if (isNew) {
-            document.getElementById('customer_id').value = '';
+            // Clear custom customer select
+            const wrapper = document.querySelector('.customer-select-wrapper');
+            if (wrapper) {
+                wrapper.querySelector('#customer_id').value = '';
+                const valueSpan = wrapper.querySelector('.customer-select-value');
+                valueSpan.textContent = 'Select a customer...';
+                valueSpan.classList.add('placeholder');
+                wrapper.querySelector('.customer-select-clear').classList.remove('visible');
+                wrapper.querySelectorAll('.customer-select-option').forEach(opt => opt.classList.remove('selected'));
+            }
         } else {
             document.getElementById('customer_name').value = '';
             document.getElementById('customer_phone').value = '';
@@ -920,6 +1239,113 @@
             document.getElementById('customer_state_code').value = '';
         }
     }
+
+    // Custom Customer Select Functions
+    function toggleCustomerSelect(headerElement) {
+        const wrapper = headerElement.closest('.customer-select-wrapper');
+        const dropdown = wrapper.querySelector('.customer-select-dropdown');
+        const isOpen = dropdown.classList.contains('open');
+
+        // Close all other dropdowns
+        document.querySelectorAll('.customer-select-dropdown.open').forEach(el => {
+            el.classList.remove('open');
+            el.closest('.customer-select-wrapper').querySelector('.customer-select-header').classList.remove('focused');
+        });
+        document.querySelectorAll('.product-select-dropdown.open').forEach(el => {
+            el.classList.remove('open');
+            el.closest('.product-select-wrapper').querySelector('.product-select-header').classList.remove('focused');
+        });
+
+        if (!isOpen) {
+            dropdown.classList.add('open');
+            headerElement.classList.add('focused');
+            const searchInput = dropdown.querySelector('.customer-search-input');
+            if (searchInput) {
+                setTimeout(() => searchInput.focus(), 50);
+            }
+        }
+    }
+
+    function selectCustomerOption(event, optionElement) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const wrapper = optionElement.closest('.customer-select-wrapper');
+        const hiddenInput = wrapper.querySelector('#customer_id');
+        const header = wrapper.querySelector('.customer-select-header');
+        const valueSpan = header.querySelector('.customer-select-value');
+        const dropdown = wrapper.querySelector('.customer-select-dropdown');
+        const clearBtn = header.querySelector('.customer-select-clear');
+
+        hiddenInput.value = optionElement.dataset.customerId;
+        valueSpan.textContent = optionElement.dataset.customerName;
+        valueSpan.classList.remove('placeholder');
+        clearBtn.classList.add('visible');
+
+        wrapper.querySelectorAll('.customer-select-option').forEach(opt => opt.classList.remove('selected'));
+        optionElement.classList.add('selected');
+
+        dropdown.classList.remove('open');
+        header.classList.remove('focused');
+    }
+
+    function clearCustomerSelect(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const wrapper = event.target.closest('.customer-select-wrapper');
+        const hiddenInput = wrapper.querySelector('#customer_id');
+        const header = wrapper.querySelector('.customer-select-header');
+        const valueSpan = header.querySelector('.customer-select-value');
+        const clearBtn = header.querySelector('.customer-select-clear');
+
+        hiddenInput.value = '';
+        valueSpan.textContent = 'Select a customer...';
+        valueSpan.classList.add('placeholder');
+        clearBtn.classList.remove('visible');
+
+        wrapper.querySelectorAll('.customer-select-option').forEach(opt => opt.classList.remove('selected'));
+    }
+
+    function filterCustomers(searchInput) {
+        const wrapper = searchInput.closest('.customer-select-wrapper');
+        const options = wrapper.querySelectorAll('.customer-select-option');
+        const searchTerm = searchInput.value.toLowerCase();
+
+        options.forEach(option => {
+            const name = (option.dataset.customerName || '').toLowerCase();
+            const phone = (option.dataset.customerPhone || '').toLowerCase();
+            option.style.display = (name.includes(searchTerm) || phone.includes(searchTerm)) ? '' : 'none';
+        });
+    }
+
+    // Set initial customer selection on page load
+    (function() {
+        const customerId = document.getElementById('customer_id').value;
+        if (customerId) {
+            const wrapper = document.querySelector('.customer-select-wrapper');
+            const option = wrapper.querySelector('.customer-select-option[data-customer-id="' + customerId + '"]');
+            if (option) {
+                const header = wrapper.querySelector('.customer-select-header');
+                const valueSpan = header.querySelector('.customer-select-value');
+                const clearBtn = header.querySelector('.customer-select-clear');
+                valueSpan.textContent = option.dataset.customerName;
+                valueSpan.classList.remove('placeholder');
+                clearBtn.classList.add('visible');
+                option.classList.add('selected');
+            }
+        }
+    })();
+
+    // Close customer dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.customer-select-wrapper')) {
+            document.querySelectorAll('.customer-select-dropdown.open').forEach(dropdown => {
+                dropdown.classList.remove('open');
+                dropdown.closest('.customer-select-wrapper').querySelector('.customer-select-header').classList.remove('focused');
+            });
+        }
+    });
 
     // Custom Product Select Functions
     function toggleProductSelect(headerElement) {
@@ -1351,6 +1777,165 @@
             });
         }
     });
+
+    // Product Creation Modal Functions
+    window.productModalOpen = null; // Store which row the modal was opened from
+    
+    function openProductModal(button) {
+        document.getElementById('productModal').classList.remove('hidden');
+        // Find the wrapper in the same parent (flex container)
+        const parent = button.parentElement;
+        window.productModalOpen = parent.querySelector('.product-select-wrapper');
+        document.getElementById('productName').focus();
+    }
+
+    function closeProductModal() {
+        document.getElementById('productModal').classList.add('hidden');
+        document.getElementById('productModalForm').reset();
+        window.productModalOpen = null;
+    }
+
+    function submitProductModal(event) {
+        event.preventDefault();
+        
+        const name = document.getElementById('productName').value.trim();
+        const price = document.getElementById('productPrice').value;
+
+        if (!name || !price) {
+            showToast('Please fill in all fields', 'warning');
+            return;
+        }
+
+        // Show loading state
+        const submitBtn = event.target.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Creating...';
+
+        // Submit via AJAX
+        fetch('{{ route("products.store") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            },
+            body: JSON.stringify({
+                name: name,
+                price: parseFloat(price),
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(`HTTP ${response.status}: ${text}`);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Add product to all dropdowns
+                addProductToAllDropdowns(data.product);
+                
+                // Select in the current row
+                if (window.productModalOpen) {
+                    selectProductInTarget(window.productModalOpen, data.product);
+                }
+
+                closeProductModal();
+                showToast('Product created successfully!', 'success');
+            } else {
+                const errorMsg = data.errors 
+                    ? Object.values(data.errors).flat().join(', ')
+                    : data.message || 'Failed to create product';
+                showToast('Error: ' + errorMsg, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('Error creating product: ' + error.message, 'error');
+        })
+        .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+        });
+    }
+
+    function addProductToAllDropdowns(product) {
+        // Add to all product select dropdowns
+        document.querySelectorAll('.product-select-options').forEach(optionsContainer => {
+            const optionButton = document.createElement('button');
+            optionButton.type = 'button';
+            optionButton.className = 'product-select-option';
+            optionButton.setAttribute('data-product-id', product.id);
+            optionButton.setAttribute('data-product-name', product.name);
+            optionButton.setAttribute('data-product-hsn', product.hsn_code);
+            optionButton.setAttribute('data-product-price', product.price);
+            optionButton.setAttribute('data-product-gst', product.gst_percentage);
+            optionButton.onclick = function(e) { selectProduct(e, this); };
+            
+            optionButton.innerHTML = `
+                <div class="product-select-option-main">
+                    <span class="product-select-option-name">${product.name}</span>
+                    <span class="product-select-option-hsn">${product.hsn_code}</span>
+                </div>
+                <span class="product-select-checkmark">✓</span>
+            `;
+            
+            optionsContainer.appendChild(optionButton);
+        });
+    }
+
+    function selectProductInTarget(targetWrapper, product) {
+        const selectInput = targetWrapper.querySelector('.product-select-input');
+        const selectHeader = targetWrapper.querySelector('.product-select-header');
+        const selectValue = selectHeader.querySelector('.product-select-value');
+        const clearBtn = selectHeader.querySelector('.product-select-clear');
+        
+        selectInput.value = product.id;
+        selectValue.textContent = product.name;
+        selectValue.classList.remove('placeholder');
+        if (clearBtn) clearBtn.classList.add('visible');
+
+        // Add the new product to invoiceForm.products so handleProductChange can find it
+        if (typeof invoiceForm !== 'undefined') {
+            const exists = invoiceForm.products.find(p => p.id == product.id);
+            if (!exists) {
+                invoiceForm.products.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    hsn_code: product.hsn_code,
+                    gst_percentage: product.gst_percentage
+                });
+            }
+            // Now trigger price/tax fill
+            invoiceForm.handleProductChange(selectInput);
+        }
+        
+        // Close dropdown
+        const dropdown = targetWrapper.querySelector('.product-select-dropdown');
+        if (dropdown) {
+            dropdown.classList.remove('open');
+            selectHeader.classList.remove('open', 'focused');
+        }
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('productModal')?.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeProductModal();
+        }
+    });
+
+    // Close with Esc key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeProductModal();
+        }
+    });
+
 </script>
 
 @vite(['resources/js/invoice-form.js'])
