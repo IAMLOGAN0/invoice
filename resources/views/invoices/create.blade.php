@@ -1799,19 +1799,28 @@
     // Toggle GST Tax Column Visibility
     function toggleGstTaxColumn() {
         const applyGst = document.getElementById('apply_gst').checked;
-        const taxCells = document.querySelectorAll('th:nth-child(4), td:nth-child(4)');
         
-        if (applyGst) {
-            // Show tax column
-            taxCells.forEach(cell => {
-                cell.style.display = '';
-            });
-        } else {
-            // Hide tax column
-            taxCells.forEach(cell => {
-                cell.style.display = 'none';
-            });
-        }
+        // Desktop: toggle 4th column (Tax %)
+        const taxCells = document.querySelectorAll('th:nth-child(4), td:nth-child(4)');
+        taxCells.forEach(cell => {
+            cell.style.display = applyGst ? '' : 'none';
+        });
+
+        // Mobile: toggle tax input wrapper inside cards
+        document.querySelectorAll('.product-card .tax-input').forEach(input => {
+            const wrapper = input.closest('div');
+            if (wrapper) wrapper.style.display = applyGst ? '' : 'none';
+        });
+        // Switch mobile grid from 3 cols to 2 cols when tax hidden
+        document.querySelectorAll('.product-card .grid').forEach(grid => {
+            if (applyGst) {
+                grid.classList.remove('grid-cols-2');
+                grid.classList.add('grid-cols-3');
+            } else {
+                grid.classList.remove('grid-cols-3');
+                grid.classList.add('grid-cols-2');
+            }
+        });
         
         // Recalculate totals
         if (typeof invoiceForm !== 'undefined') {
