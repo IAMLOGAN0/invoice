@@ -157,6 +157,17 @@ class InvoiceForm {
             grandTotal += subtotal + taxAmount;
         });
         
+        // Get discount amount
+        const discountDisplay = document.getElementById('discount-display');
+        let discountAmount = 0;
+        if (discountDisplay && !discountDisplay.classList.contains('hidden')) {
+            const discountText = document.getElementById('discountAmount').textContent;
+            discountAmount = parseFloat(discountText.replace('₹', '').trim()) || 0;
+        }
+        
+        // Apply discount to grand total
+        grandTotal = Math.max(0, grandTotal - discountAmount);
+        
         this.grandTotalElement.textContent = '₹' + this.formatCurrency(grandTotal);
         this.totalTaxElement.textContent = '₹' + this.formatCurrency(totalTax);
         this.subtotalElement.textContent = '₹' + this.formatCurrency(subtotalAmount);

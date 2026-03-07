@@ -20,10 +20,14 @@ class Invoice extends Model
         'sgst',
         'igst',
         'grand_total',
+        'coupon_id',
+        'discount_type',
+        'discount_amount',
     ];
 
     protected $casts = [
         'apply_gst' => 'boolean',
+        'discount_amount' => 'decimal:2',
     ];
 
     public function shop()
@@ -34,6 +38,11 @@ class Invoice extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class);
     }
 
     public function items()

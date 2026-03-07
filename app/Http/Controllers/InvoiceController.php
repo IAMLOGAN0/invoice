@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\Shop;
+use App\Models\Coupon;
 use App\Services\InvoiceCalculator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +29,8 @@ class InvoiceController extends Controller
     {
         $customers = Customer::all();
         $products = Product::all();
-        return view('invoices.create', compact('customers', 'products'));
+        $coupons = Coupon::where('is_active', true)->get();
+        return view('invoices.create', compact('customers', 'products', 'coupons'));
     }
 
     /**
@@ -59,6 +61,10 @@ class InvoiceController extends Controller
                 'customer_state_code' => 'nullable|string|max:2',
                 'invoice_date' => 'required|date',
                 'apply_gst' => 'boolean',
+                'discount_option' => 'nullable|in:none,coupon,flat',
+                'coupon_id' => 'nullable|exists:coupons,id',
+                'flat_discount' => 'nullable|numeric|min:0',
+                'discount_amount' => 'nullable|numeric|min:0',
                 'items' => 'required|array|min:1',
                 'items.*.product_id' => 'required|exists:products,id',
                 'items.*.quantity' => 'required|integer|min:1',
@@ -150,8 +156,43 @@ class InvoiceController extends Controller
 
         $grandTotal = $subtotal + $totalGst;
 
+        // Handle coupon or flat discount
+        $discountAmount = 0;
+        $discountType = null;
+        $couponId = null;
+
+        if ($request->discount_option === 'coupon' && $request->coupon_id) {
+            $coupon = Coupon::findOrFail($request->coupon_id);
+            
+            // Calculate discount amount based on coupon type
+            if ($coupon->discount_type === 'percentage') {
+                $discountAmount = ($grandTotal * $coupon->discount_value) / 100;
+            } else {
+                $discountAmount = $coupon->discount_value;
+            }
+
+            // Apply max discount limit if set
+            if ($coupon->max_discount > 0 && $discountAmount > $coupon->max_discount) {
+                $discountAmount = $coupon->max_discount;
+            }
+
+            // Check minimum amount requirement
+            if ($coupon->min_amount > 0 && $grandTotal < $coupon->min_amount) {
+                throw new \Exception('Order amount must be atleast ₹' . $coupon->min_amount . ' to apply this coupon');
+            }
+
+            $discountType = 'coupon';
+            $couponId = $coupon->id;
+        } elseif ($request->discount_option === 'flat' && $request->flat_discount > 0) {
+            $discountAmount = $request->flat_discount;
+            $discountType = 'flat';
+        }
+
+        // Apply discount to grand total
+        $grandTotal = max(0, $grandTotal - $discountAmount);
+
         $invoice = null;
-        DB::transaction(function () use ($request, $shop, $customer, $subtotal, $cgst, $sgst, $igst, $grandTotal, $invoiceItems, $applyGst, &$invoice) {
+        DB::transaction(function () use ($request, $shop, $customer, $subtotal, $cgst, $sgst, $igst, $grandTotal, $invoiceItems, $applyGst, $discountAmount, $discountType, $couponId, &$invoice) {
             $invoice = Invoice::create([
                 'invoice_no' => 'INV-' . time(),
                 'shop_id' => $shop->id,
@@ -163,6 +204,9 @@ class InvoiceController extends Controller
                 'sgst' => $sgst,
                 'igst' => $igst,
                 'grand_total' => $grandTotal,
+                'coupon_id' => $couponId,
+                'discount_type' => $discountType,
+                'discount_amount' => $discountAmount,
             ]);
 
             foreach ($invoiceItems as $itemData) {

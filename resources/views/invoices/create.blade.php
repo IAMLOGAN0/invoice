@@ -223,6 +223,214 @@
 .product-select-option.selected .product-select-checkmark {
     display: inline;
 }
+
+/* Custom Coupon Select Styles */
+.coupon-select-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: visible;
+}
+
+.coupon-select-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #bfdbfe;
+    border-radius: 6px;
+    background-color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 40px;
+}
+
+.coupon-select-header:hover {
+    border-color: #93c5fd;
+    background-color: #eff6ff;
+}
+
+.coupon-select-header.focused {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    outline: none;
+}
+
+.coupon-select-value {
+    flex: 1;
+    color: #374151;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.coupon-select-value.placeholder {
+    color: #9ca3af;
+}
+
+.coupon-select-icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 8px;
+}
+
+.coupon-select-clear {
+    display: none;
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #9ca3af;
+    transition: color 0.2s;
+}
+
+.coupon-select-clear:hover {
+    color: #6b7280;
+}
+
+.coupon-select-clear.visible {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.coupon-select-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: #6b7280;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+}
+
+.coupon-select-header.open .coupon-select-arrow {
+    transform: rotate(180deg);
+}
+
+.coupon-select-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    border: 2px solid #bfdbfe;
+    border-radius: 6px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    z-index: 9999;
+    max-height: 280px;
+    overflow-y: auto;
+    display: none;
+    min-width: 100%;
+}
+
+.coupon-select-dropdown::-webkit-scrollbar {
+    width: 8px;
+}
+
+.coupon-select-dropdown::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.coupon-select-dropdown::-webkit-scrollbar-thumb {
+    background-color: #d1d5db;
+    border-radius: 4px;
+}
+
+.coupon-select-dropdown::-webkit-scrollbar-thumb:hover {
+    background-color: #9ca3af;
+}
+
+.coupon-select-dropdown {
+    scrollbar-color: #d1d5db transparent;
+    scrollbar-width: thin;
+}
+
+.coupon-select-dropdown.open {
+    display: block;
+}
+
+.coupon-select-search {
+    position: sticky;
+    top: 0;
+    padding: 8px;
+    background-color: #dbeafe;
+    border-bottom: 1px solid #bfdbfe;
+}
+
+.coupon-select-search input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #bfdbfe;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.coupon-select-search input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.coupon-select-options {
+    padding: 4px 0;
+}
+
+.coupon-select-option {
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: background-color 0.15s;
+    border: none;
+    width: 100%;
+    text-align: left;
+    background: none;
+    font-size: 14px;
+    color: #374151;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.coupon-select-option:hover {
+    background-color: #dbeafe;
+}
+
+.coupon-select-option.selected {
+    background-color: #bfdbfe;
+    color: #1e40af;
+    font-weight: 500;
+}
+
+.coupon-select-option-main {
+    flex: 1;
+}
+
+.coupon-select-option-code {
+    display: block;
+    font-weight: 600;
+    color: #1e40af;
+}
+
+.coupon-select-option-detail {
+    display: block;
+    color: #1e40af;
+    font-size: 12px;
+}
+
+.coupon-select-checkmark {
+    display: none;
+    color: #2563eb;
+    font-weight: bold;
+    margin-left: 8px;
+}
+
+.coupon-select-option.selected .coupon-select-checkmark {
+    display: inline;
+}
 </style>
 
 <div class="max-w-7xl mx-auto py-6">
@@ -506,6 +714,10 @@
                             <span class="text-gray-700">Subtotal:</span>
                             <span class="font-semibold" id="subtotal">₹0.00</span>
                         </div>
+                        <div id="discount-display" class="flex justify-between text-sm hidden">
+                            <span class="text-gray-700">Discount:</span>
+                            <span class="font-semibold text-red-600" id="discountAmount">₹0.00</span>
+                        </div>
                         <div class="flex justify-between text-sm">
                             <span class="text-gray-700">Total Tax:</span>
                             <span class="font-semibold" id="totalTax">₹0.00</span>
@@ -526,8 +738,7 @@
                         {{ isset($invoice) ? 'Update' : 'Create' }} Invoice
                     </button>
                 </div>
-            </form>
-        </div>
+            </div>
 
         <!-- Shop Details Sidebar -->
         <div class="col-span-1">
@@ -565,8 +776,126 @@
                         </a>
                     </div>
                 @endif
+
+                <!-- Divider -->
+                <div class="my-6 border-t border-gray-200"></div>
+
+                <!-- Discount Section -->
+                <div class="mb-6">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"/>
+                        </svg>
+                        <h3 class="text-sm font-semibold text-gray-900">Discount</h3>
+                    </div>
+
+                    <!-- Discount Type Selection -->
+                    <div class="space-y-2 mb-4">
+                        <label class="flex items-center">
+                            <input 
+                                type="radio" 
+                                name="discount_option" 
+                                value="none" 
+                                checked
+                                class="w-4 h-4 text-blue-600 border-gray-300 cursor-pointer"
+                                onchange="toggleDiscountType()"
+                            >
+                            <span class="ml-2 text-sm text-gray-700">No Discount</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input 
+                                type="radio" 
+                                name="discount_option" 
+                                value="coupon" 
+                                class="w-4 h-4 text-blue-600 border-gray-300 cursor-pointer"
+                                onchange="toggleDiscountType()"
+                            >
+                            <span class="ml-2 text-sm text-gray-700">Promo Code</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input 
+                                type="radio" 
+                                name="discount_option" 
+                                value="flat" 
+                                class="w-4 h-4 text-blue-600 border-gray-300 cursor-pointer"
+                                onchange="toggleDiscountType()"
+                            >
+                            <span class="ml-2 text-sm text-gray-700">Flat Discount</span>
+                        </label>
+                    </div>
+
+                    <!-- Coupon Custom Select -->
+                    <div id="coupon-section" class="hidden mb-3">
+                        <label class="block text-xs font-semibold text-gray-700 mb-2">Promo Code</label>
+                        <div class="coupon-select-wrapper">
+                            <input type="hidden" name="coupon_id" id="coupon_id" class="coupon-select-input" data-discount-type="" data-discount-value="0" data-min-amount="0" data-max-discount="0" onchange="handleCouponChange()">
+                            <div class="coupon-select-header" onclick="toggleCouponSelect(this)" style="padding: 8px 10px; min-height: 36px;">
+                                <span class="coupon-select-value placeholder text-gray-500 text-sm">Select code...</span>
+                                <div class="coupon-select-icons">
+                                    <button type="button" class="coupon-select-clear" onclick="clearCouponSelect(event, this)">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                                        </svg>
+                                    </button>
+                                    <span class="coupon-select-arrow">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="coupon-select-dropdown">
+                                <div class="coupon-select-search">
+                                    <input type="text" placeholder="Search..." class="coupon-search-input" onkeyup="filterCoupons(this)">
+                                </div>
+                                <div class="coupon-select-options">
+                                    @foreach($coupons as $coupon)
+                                        <button 
+                                            type="button" 
+                                            class="coupon-select-option" 
+                                            data-coupon-id="{{ $coupon->id }}" 
+                                            data-coupon-code="{{ $coupon->code }}"
+                                            data-discount-type="{{ $coupon->discount_type }}"
+                                            data-discount-value="{{ $coupon->discount_value }}"
+                                            data-min-amount="{{ $coupon->min_amount }}"
+                                            data-max-discount="{{ $coupon->max_discount }}"
+                                            onclick="selectCoupon(event, this)"
+                                        >
+                                            <div class="coupon-select-option-main">
+                                                <span class="coupon-select-option-code font-semibold text-sm">{{ $coupon->code }}</span>
+                                                <span class="coupon-select-option-detail text-xs">{{ ucfirst($coupon->discount_type) }} {{ $coupon->discount_value }}{{ $coupon->discount_type === 'percentage' ? '%' : '₹' }}</span>
+                                            </div>
+                                            <span class="coupon-select-checkmark">✓</span>
+                                        </button>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flat Discount Input -->
+                    <div id="flat-discount-section" class="hidden">
+                        <label for="flat_discount" class="block text-xs font-semibold text-gray-700 mb-2">Amount (₹)</label>
+                        <input 
+                            type="number" 
+                            name="flat_discount" 
+                            id="flat_discount" 
+                            step="0.01" 
+                            min="0" 
+                            value="0"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+                            onchange="handleFlatDiscountChange()"
+                            oninput="handleFlatDiscountChange()"
+                        >
+                    </div>
+
+                    <!-- Hidden Discount Amount Input for Form Submission -->
+                    <input type="hidden" name="discount_amount" value="0">
+                </div>
             </div>
         </div>
+        </form>
     </div>
 </div>
 
@@ -781,6 +1110,246 @@
     // Initialize tax column visibility on page load
     document.addEventListener('DOMContentLoaded', function() {
         toggleGstTaxColumn();
+    });
+
+    // Toggle Discount Type
+    function toggleDiscountType() {
+        const discountOption = document.querySelector('input[name="discount_option"]:checked').value;
+        const couponSection = document.getElementById('coupon-section');
+        const flatDiscountSection = document.getElementById('flat-discount-section');
+        const discountDisplay = document.getElementById('discount-display');
+
+        if (discountOption === 'coupon') {
+            couponSection.classList.remove('hidden');
+            flatDiscountSection.classList.add('hidden');
+            discountDisplay.classList.remove('hidden');
+        } else if (discountOption === 'flat') {
+            couponSection.classList.add('hidden');
+            flatDiscountSection.classList.remove('hidden');
+            discountDisplay.classList.remove('hidden');
+        } else {
+            couponSection.classList.add('hidden');
+            flatDiscountSection.classList.add('hidden');
+            discountDisplay.classList.add('hidden');
+            clearCouponSelectionInternal();
+            document.getElementById('flat_discount').value = '0';
+        }
+
+        updateDiscountCalculation();
+    }
+
+    // Toggle Coupon Select Dropdown
+    function toggleCouponSelect(header) {
+        header.classList.toggle('open');
+        const dropdown = header.nextElementSibling;
+        dropdown.classList.toggle('open');
+        header.classList.toggle('focused');
+    }
+
+    // Filter Coupons
+    function filterCoupons(input) {
+        const searchText = input.value.toLowerCase();
+        const options = document.querySelectorAll('.coupon-select-option');
+        
+        options.forEach(option => {
+            const code = option.getAttribute('data-coupon-code').toLowerCase();
+            const detail = option.querySelector('.coupon-select-option-detail').textContent.toLowerCase();
+            if (code.includes(searchText) || detail.includes(searchText)) {
+                option.style.display = '';
+            } else {
+                option.style.display = 'none';
+            }
+        });
+    }
+
+    // Select Coupon
+    // Store selected coupon data
+    let selectedCouponData = {
+        id: null,
+        discountType: null,
+        discountValue: 0,
+        minAmount: 0,
+        maxDiscount: 0
+    };
+
+    function selectCoupon(event, button) {
+        event.preventDefault();
+        
+        const couponId = button.getAttribute('data-coupon-id');
+        const couponCode = button.getAttribute('data-coupon-code');
+        const discountType = button.getAttribute('data-discount-type');
+        const discountValue = parseFloat(button.getAttribute('data-discount-value')) || 0;
+        const minAmount = parseFloat(button.getAttribute('data-min-amount')) || 0;
+        const maxDiscount = parseFloat(button.getAttribute('data-max-discount')) || 0;
+        
+        // Store coupon data in variable
+        selectedCouponData = {
+            id: couponId,
+            discountType: discountType,
+            discountValue: discountValue,
+            minAmount: minAmount,
+            maxDiscount: maxDiscount
+        };
+        
+        // Also set on input for form submission
+        const input = document.querySelector('.coupon-select-input');
+        input.value = couponId;
+        
+        const header = input.parentElement.querySelector('.coupon-select-header');
+        const valueSpan = header.querySelector('.coupon-select-value');
+        valueSpan.textContent = couponCode;
+        valueSpan.classList.remove('placeholder');
+        
+        // Update selected state
+        document.querySelectorAll('.coupon-select-option').forEach(opt => opt.classList.remove('selected'));
+        button.classList.add('selected');
+        
+        // Show clear button
+        const clearBtn = header.querySelector('.coupon-select-clear');
+        if (clearBtn) {
+            clearBtn.classList.add('visible');
+        }
+        
+        // Close dropdown
+        const dropdown = header.nextElementSibling;
+        dropdown.classList.remove('open');
+        header.classList.remove('open', 'focused');
+        
+        // Clear search
+        const searchInput = dropdown.querySelector('.coupon-search-input');
+        if (searchInput) {
+            searchInput.value = '';
+            filterCoupons(searchInput);
+        }
+        
+        // Trigger calculation
+        handleCouponChange();
+    }
+
+    // Clear Coupon Selection
+    function clearCouponSelect(event, button) {
+        event.preventDefault();
+        event.stopPropagation();
+        clearCouponSelectionInternal();
+        updateDiscountCalculation();
+    }
+
+    // Internal clear function
+    function clearCouponSelectionInternal() {
+        // Clear stored coupon data
+        selectedCouponData = {
+            id: null,
+            discountType: null,
+            discountValue: 0,
+            minAmount: 0,
+            maxDiscount: 0
+        };
+        
+        const input = document.querySelector('.coupon-select-input');
+        input.value = '';
+        
+        const header = input.parentElement.querySelector('.coupon-select-header');
+        const valueSpan = header.querySelector('.coupon-select-value');
+        valueSpan.textContent = 'Select a promo code...';
+        valueSpan.classList.add('placeholder');
+        
+        document.querySelectorAll('.coupon-select-option').forEach(opt => opt.classList.remove('selected'));
+        
+        const clearBtn = header.querySelector('.coupon-select-clear');
+        if (clearBtn) {
+            clearBtn.classList.remove('visible');
+        }
+        
+        const dropdown = header.nextElementSibling;
+        dropdown.classList.remove('open');
+        header.classList.remove('open', 'focused');
+    }
+
+    // Handle Coupon Change
+    function handleCouponChange() {
+        updateDiscountCalculation();
+    }
+
+    // Handle Flat Discount Change
+    function handleFlatDiscountChange() {
+        updateDiscountCalculation();
+    }
+
+    // Update Discount Calculation
+    function updateDiscountCalculation() {
+        const discountOption = document.querySelector('input[name="discount_option"]:checked').value;
+        const discountDisplay = document.getElementById('discount-display');
+        const discountAmountDisplay = document.getElementById('discountAmount');
+        
+        let discountAmount = 0;
+
+        if (discountOption === 'coupon') {
+            const couponInput = document.querySelector('.coupon-select-input');
+            const couponId = couponInput.value;
+            
+            if (couponId && selectedCouponData.id) {
+                const discountType = selectedCouponData.discountType;
+                const discountValue = selectedCouponData.discountValue;
+                const minAmount = selectedCouponData.minAmount;
+                const maxDiscount = selectedCouponData.maxDiscount;
+                
+                // Get subtotal before discount
+                const subtotal = parseFloat(document.getElementById('subtotal').textContent.replace('₹', '').trim()) || 0;
+                
+                // Check minimum amount requirement
+                if (minAmount > 0 && subtotal < minAmount) {
+                    discountAmountDisplay.textContent = '₹0.00';
+                    discountDisplay.classList.add('hidden');
+                    if (typeof invoiceForm !== 'undefined') {
+                        invoiceForm.updateGrandTotal();
+                    }
+                    return;
+                }
+                
+                if (discountType === 'percentage') {
+                    discountAmount = (subtotal * discountValue) / 100;
+                } else {
+                    discountAmount = discountValue;
+                }
+                
+                if (maxDiscount > 0 && discountAmount > maxDiscount) {
+                    discountAmount = maxDiscount;
+                }
+            }
+        } else if (discountOption === 'flat') {
+            const flatDiscount = parseFloat(document.getElementById('flat_discount').value) || 0;
+            discountAmount = flatDiscount > 0 ? flatDiscount : 0;
+        }
+
+        // Update display and hidden input
+        if (discountAmount > 0) {
+            discountAmountDisplay.textContent = '₹' + discountAmount.toFixed(2);
+            discountDisplay.classList.remove('hidden');
+        } else {
+            discountAmountDisplay.textContent = '₹0.00';
+            discountDisplay.classList.add('hidden');
+        }
+
+        // Update hidden input for submission
+        document.querySelectorAll('input[name="discount_amount"]').forEach(input => {
+            input.value = discountAmount.toFixed(2);
+        });
+
+        // If invoiceForm exists, recalculate grand total
+        if (typeof invoiceForm !== 'undefined') {
+            invoiceForm.updateGrandTotal();
+        }
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        const cSelect = event.target.closest('.coupon-select-wrapper');
+        if (!cSelect) {
+            document.querySelectorAll('.coupon-select-dropdown').forEach(drop => {
+                drop.classList.remove('open');
+                drop.parentElement.querySelector('.coupon-select-header').classList.remove('open', 'focused');
+            });
+        }
     });
 </script>
 

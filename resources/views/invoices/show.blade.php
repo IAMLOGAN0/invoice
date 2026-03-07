@@ -135,6 +135,19 @@
                                 </div>
                             @endif
 
+                            @if ($invoice->discount_amount > 0)
+                                <div class="flex justify-between items-center text-red-600">
+                                    <span>Discount 
+                                        @if ($invoice->discount_type === 'coupon')
+                                            ({{ $invoice->coupon->code ?? 'N/A' }})
+                                        @else
+                                            (Flat)
+                                        @endif
+                                    </span>
+                                    <span class="font-semibold">-₹{{ number_format($invoice->discount_amount, 2) }}</span>
+                                </div>
+                            @endif
+
                             <div class="pt-3 border-t-2 border-gray-300 flex justify-between items-center">
                                 <span class="text-lg font-bold text-gray-900">Grand Total</span>
                                 <span class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-indigo-700 bg-clip-text text-transparent">₹{{ number_format($invoice->grand_total, 2) }}</span>

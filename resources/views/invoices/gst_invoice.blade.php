@@ -348,6 +348,18 @@
             <td class="summary-label">IGST</td>
             <td class="summary-value">₹{{ number_format($invoice->igst,2) }}</td>
         </tr>
+        @if ($invoice->discount_amount > 0)
+            <tr style="color: #dc2626; border-bottom: 1px solid #e5e7eb;">
+                <td class="summary-label">Discount 
+                    @if ($invoice->discount_type === 'coupon')
+                        ({{ $invoice->coupon->code ?? 'N/A' }})
+                    @else
+                        (Flat)
+                    @endif
+                </td>
+                <td class="summary-value" style="color: #dc2626;">-₹{{ number_format($invoice->discount_amount,2) }}</td>
+            </tr>
+        @endif
         <tr class="total-row">
             <td>GRAND TOTAL</td>
             <td>₹{{ number_format($invoice->grand_total,2) }}</td>
