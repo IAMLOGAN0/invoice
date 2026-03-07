@@ -811,12 +811,12 @@
                         <table class="w-full" id="productsTable">
                             <thead class="bg-gray-50 border-b border-gray-200">
                                 <tr>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase" style="min-width: 240px;">Product</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-16">Quantity</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Unit Price</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-28">Tax (%)</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total</th>
-                                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Action</th>
+                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase" style="min-width: 200px;">Product</th>
+                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase" style="min-width: 60px;">Qty</th>
+                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase" style="min-width: 70px;">Price</th>
+                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase" style="min-width: 60px;">Tax %</th>
+                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase" style="min-width: 70px;">Total</th>
+                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-center text-xs font-medium text-gray-500 uppercase" style="min-width: 60px;">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="itemsContainer">
@@ -869,18 +869,18 @@
                                                     </button>
                                                 </div>
                                             </td>
-                                            <td class="px-4 py-3 w-16">
-                                                <input type="number" name="items[{{ $loop->index }}][quantity]" value="{{ $item->qty }}" step="1" min="1" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 quantity-input" onchange="updateTotal(this)">
+                                            <td class="px-2 sm:px-4 py-2 sm:py-3">
+                                                <input type="number" name="items[{{ $loop->index }}][quantity]" value="{{ $item->qty }}" step="1" min="1" class="w-full h-10 sm:h-auto px-2 sm:px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 quantity-input" onchange="updateTotal(this)">
                                             </td>
-                                            <td class="px-4 py-3">
-                                                <input type="number" name="items[{{ $loop->index }}][unit_price]" value="{{ $item->price }}" step="0.01" min="0" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 price-input" onchange="updateTotal(this)">
+                                            <td class="px-2 sm:px-4 py-2 sm:py-3">
+                                                <input type="number" name="items[{{ $loop->index }}][unit_price]" value="{{ $item->price }}" step="0.01" min="0" class="w-full h-10 sm:h-auto px-2 sm:px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 price-input" onchange="updateTotal(this)">
                                             </td>
-                                            <td class="px-4 py-3 w-28">
-                                                <input type="number" name="items[{{ $loop->index }}][tax_rate]" value="{{ $item->gst_amount / $item->total * 100 ?? 0 }}" step="0.01" min="0" max="100" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 tax-input" onchange="updateTotal(this)">
+                                            <td class="px-2 sm:px-4 py-2 sm:py-3">
+                                                <input type="number" name="items[{{ $loop->index }}][tax_rate]" value="{{ $item->gst_amount / $item->total * 100 ?? 0 }}" step="0.01" min="0" max="100" class="w-full h-10 sm:h-auto px-2 sm:px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 tax-input" onchange="updateTotal(this)">
                                             </td>
-                                            <td class="px-4 py-3 text-right font-semibold text-gray-900 row-total">₹{{ number_format($item->total, 2) }}</td>
-                                            <td class="px-4 py-3 text-center">
-                                                <button type="button" onclick="removeProductRow(this)" class="text-red-600 hover:text-red-900 text-sm">Remove</button>
+                                            <td class="px-2 sm:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-gray-900 row-total">₹{{ number_format($item->total, 2) }}</td>
+                                            <td class="px-2 sm:px-4 py-2 sm:py-3 text-center">
+                                                <button type="button" onclick="removeProductRow(this)" class="text-red-600 hover:text-red-900 text-xs sm:text-sm whitespace-nowrap">Remove</button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -932,23 +932,92 @@
                                             </button>
                                         </div>
                                         </td>
-                                        <td class="px-4 py-3 w-16">
-                                            <input type="number" name="items[0][quantity]" value="1" step="1" min="1" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 quantity-input" onchange="updateTotal(this)">
+                                        <td class="px-2 sm:px-4 py-2 sm:py-3">
+                                            <input type="number" name="items[0][quantity]" value="1" step="1" min="1" class="w-full h-10 sm:h-auto px-2 sm:px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 quantity-input" onchange="updateTotal(this)">
                                         </td>
-                                        <td class="px-4 py-3">
-                                            <input type="number" name="items[0][unit_price]" value="0" step="0.01" min="0" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 price-input" onchange="updateTotal(this)">
+                                        <td class="px-2 sm:px-4 py-2 sm:py-3">
+                                            <input type="number" name="items[0][unit_price]" value="0" step="0.01" min="0" class="w-full h-10 sm:h-auto px-2 sm:px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 price-input" onchange="updateTotal(this)">
                                         </td>
-                                        <td class="px-4 py-3 w-28">
-                                            <input type="number" name="items[0][tax_rate]" value="0" step="0.01" min="0" max="100" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 tax-input" onchange="updateTotal(this)">
+                                        <td class="px-2 sm:px-4 py-2 sm:py-3">
+                                            <input type="number" name="items[0][tax_rate]" value="0" step="0.01" min="0" max="100" class="w-full h-10 sm:h-auto px-2 sm:px-3 py-2 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 tax-input" onchange="updateTotal(this)">
                                         </td>
-                                        <td class="px-4 py-3 text-right font-semibold text-gray-900 row-total">₹0.00</td>
-                                        <td class="px-4 py-3 text-center">
-                                            <button type="button" onclick="removeProductRow(this)" class="text-red-600 hover:text-red-900 text-sm">Remove</button>
+                                        <td class="px-2 sm:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-gray-900 row-total">₹0.00</td>
+                                        <td class="px-2 sm:px-4 py-2 sm:py-3 text-center">
+                                            <button type="button" onclick="removeProductRow(this)" class="text-red-600 hover:text-red-900 text-xs sm:text-sm whitespace-nowrap">Remove</button>
                                         </td>
                                     </tr>
                                 @endif
                             </tbody>
                         </table>
+                    </div>
+                </div>
+
+                <!-- Discount Section (Mobile Only) -->
+                <div class="lg:hidden mb-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"/>
+                        </svg>
+                        <h3 class="text-sm font-semibold text-gray-900">Discount</h3>
+                    </div>
+
+                    <!-- Discount Type Selection -->
+                    <div class="space-y-2 mb-3">
+                        <label class="flex items-center">
+                            <input 
+                                type="radio" 
+                                name="discount_option_mobile" 
+                                value="none" 
+                                checked
+                                class="w-4 h-4 text-blue-600 border-gray-300 cursor-pointer"
+                                onchange="syncDiscountOption('none')">
+                            <span class="ml-2 text-xs sm:text-sm text-gray-700">No Discount</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input 
+                                type="radio" 
+                                name="discount_option_mobile" 
+                                value="coupon" 
+                                class="w-4 h-4 text-blue-600 border-gray-300 cursor-pointer"
+                                onchange="syncDiscountOption('coupon')">
+                            <span class="ml-2 text-xs sm:text-sm text-gray-700">Promo Code</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input 
+                                type="radio" 
+                                name="discount_option_mobile" 
+                                value="flat" 
+                                class="w-4 h-4 text-blue-600 border-gray-300 cursor-pointer"
+                                onchange="syncDiscountOption('flat')">
+                            <span class="ml-2 text-xs sm:text-sm text-gray-700">Flat Discount</span>
+                        </label>
+                    </div>
+
+                    <!-- Coupon Select (Mobile) -->
+                    <div id="coupon-section-mobile" class="hidden mb-3">
+                        <label class="block text-xs font-semibold text-gray-700 mb-2">Promo Code</label>
+                        <select name="coupon_id_mobile" id="coupon_id_mobile" onchange="syncCouponSelection(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition">
+                            <option value="">Select code...</option>
+                            @foreach($coupons as $coupon)
+                                <option value="{{ $coupon->id }}" data-discount-type="{{ $coupon->discount_type }}" data-discount-value="{{ $coupon->discount_value }}" data-min-amount="{{ $coupon->min_amount }}" data-max-discount="{{ $coupon->max_discount }}">{{ $coupon->code }} - {{ ucfirst($coupon->discount_type) }} {{ $coupon->discount_value }}{{ $coupon->discount_type === 'percentage' ? '%' : '₹' }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Flat Discount Input (Mobile) -->
+                    <div id="flat-discount-section-mobile" class="hidden">
+                        <label for="flat_discount_mobile" class="block text-xs font-semibold text-gray-700 mb-2">Amount (₹)</label>
+                        <input 
+                            type="number" 
+                            name="flat_discount_mobile" 
+                            id="flat_discount_mobile" 
+                            step="0.01" 
+                            min="0" 
+                            value="0"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+                            onchange="syncFlatDiscount()"
+                            oninput="syncFlatDiscount()"
+                        >
                     </div>
                 </div>
 
@@ -997,7 +1066,7 @@
             </div>
 
         <!-- Shop Details Sidebar -->
-        <div class="lg:col-span-1">
+        <div class="hidden lg:block lg:col-span-1">
             <div class="bg-white shadow-sm rounded-lg p-6 sticky top-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Shop Details</h3>
                 
@@ -1571,20 +1640,28 @@
         const discountOption = document.querySelector('input[name="discount_option"]:checked').value;
         const couponSection = document.getElementById('coupon-section');
         const flatDiscountSection = document.getElementById('flat-discount-section');
+        const couponSectionMobile = document.getElementById('coupon-section-mobile');
+        const flatDiscountSectionMobile = document.getElementById('flat-discount-section-mobile');
         const discountDisplay = document.getElementById('discount-display');
 
         if (discountOption === 'coupon') {
-            couponSection.classList.remove('hidden');
-            flatDiscountSection.classList.add('hidden');
-            discountDisplay.classList.remove('hidden');
+            couponSection?.classList.remove('hidden');
+            flatDiscountSection?.classList.add('hidden');
+            couponSectionMobile?.classList.remove('hidden');
+            flatDiscountSectionMobile?.classList.add('hidden');
+            discountDisplay?.classList.remove('hidden');
         } else if (discountOption === 'flat') {
-            couponSection.classList.add('hidden');
-            flatDiscountSection.classList.remove('hidden');
-            discountDisplay.classList.remove('hidden');
+            couponSection?.classList.add('hidden');
+            flatDiscountSection?.classList.remove('hidden');
+            couponSectionMobile?.classList.add('hidden');
+            flatDiscountSectionMobile?.classList.remove('hidden');
+            discountDisplay?.classList.remove('hidden');
         } else {
-            couponSection.classList.add('hidden');
-            flatDiscountSection.classList.add('hidden');
-            discountDisplay.classList.add('hidden');
+            couponSection?.classList.add('hidden');
+            flatDiscountSection?.classList.add('hidden');
+            couponSectionMobile?.classList.add('hidden');
+            flatDiscountSectionMobile?.classList.add('hidden');
+            discountDisplay?.classList.add('hidden');
             clearCouponSelectionInternal();
             document.getElementById('flat_discount').value = '0';
         }
@@ -1727,6 +1804,42 @@
     // Handle Flat Discount Change
     function handleFlatDiscountChange() {
         updateDiscountCalculation();
+    }
+
+    // Sync mobile discount options to desktop version
+    function syncDiscountOption(value) {
+        const desktopOption = document.querySelector(`input[name="discount_option"][value="${value}"]`);
+        if (desktopOption) {
+            desktopOption.checked = true;
+            toggleDiscountType();
+        }
+    }
+
+    // Sync mobile coupon selection to desktop
+    function syncCouponSelection(selectElement) {
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const couponId = selectedOption.value;
+        
+        if (couponId) {
+            // Find the corresponding option in the coupon-select
+            const button = document.querySelector(`.coupon-select-option[data-coupon-id="${couponId}"]`);
+            if (button) {
+                selectCoupon({ preventDefault: () => {} }, button);
+            }
+        } else {
+            clearCouponSelectionInternal();
+            updateDiscountCalculation();
+        }
+    }
+
+    // Sync mobile flat discount to desktop
+    function syncFlatDiscount() {
+        const mobileValue = document.getElementById('flat_discount_mobile')?.value || '0';
+        const desktopInput = document.getElementById('flat_discount');
+        if (desktopInput) {
+            desktopInput.value = mobileValue;
+            handleFlatDiscountChange();
+        }
     }
 
     // Update Discount Calculation
