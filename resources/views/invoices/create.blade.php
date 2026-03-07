@@ -652,9 +652,9 @@
 
     <h1 class="text-3xl font-bold text-gray-900 mb-6">{{ isset($invoice) ? 'Edit Invoice' : 'Create Invoice' }}</h1>
 
-    <div class="grid grid-cols-3 gap-6 mb-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         <!-- Main Form -->
-        <div class="col-span-2">
+        <div class="lg:col-span-2">
             <form method="POST" action="{{ isset($invoice) ? route('invoices.update', $invoice) : route('invoices.store') }}" class="bg-white shadow-sm sm:rounded-lg p-6">
                 @csrf
                 @if(isset($invoice))
@@ -807,7 +807,7 @@
                         </button>
                     </div>
 
-                    <div class="border border-gray-200 rounded-lg" style="position: relative; z-index: 0;">
+                    <div class="border border-gray-200 rounded-lg overflow-x-auto" style="position: relative; z-index: 0;">
                         <table class="w-full" id="productsTable">
                             <thead class="bg-gray-50 border-b border-gray-200">
                                 <tr>
@@ -954,7 +954,7 @@
 
                 <!-- Totals -->
                 <div class="flex justify-end mb-6">
-                    <div class="w-64 space-y-3">
+                    <div class="w-full sm:w-64 space-y-3">
                         <div class="flex justify-between text-sm">
                             <span class="text-gray-700">Subtotal:</span>
                             <span class="font-semibold" id="subtotal">₹0.00</span>
@@ -997,7 +997,7 @@
             </div>
 
         <!-- Shop Details Sidebar -->
-        <div class="col-span-1">
+        <div class="lg:col-span-1">
             <div class="bg-white shadow-sm rounded-lg p-6 sticky top-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Shop Details</h3>
                 

@@ -9,7 +9,7 @@
                 <h1 class="text-4xl font-bold text-gray-900">Invoice</h1>
                 <p class="text-gray-500 text-lg mt-1">{{ $invoice->invoice_no }}</p>
             </div>
-            <div class="flex gap-3">
+            <div class="flex flex-wrap gap-3">
                 <a href="{{ route('invoices.downloadPdf', $invoice) }}" target="_blank" class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition">
                     <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>
                     Download PDF
@@ -31,21 +31,21 @@
         <!-- Main Invoice Card -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden">
             <!-- Invoice Header -->
-            <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 px-8 py-6">
-                <div class="flex justify-between items-start">
+            <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 px-4 sm:px-8 py-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start gap-4">
                     <div>
-                        <h2 class="text-white text-3xl font-bold">TAX INVOICE</h2>
+                        <h2 class="text-white text-2xl sm:text-3xl font-bold">TAX INVOICE</h2>
                         <p class="text-indigo-100 mt-2">Invoice #{{ $invoice->invoice_no }}</p>
                     </div>
-                    <div class="text-right text-indigo-100">
+                    <div class="sm:text-right text-indigo-100">
                         <p class="text-sm">Invoice Date</p>
-                        <p class="text-2xl font-bold text-white">{{ \Carbon\Carbon::parse($invoice->invoice_date)->format('d M Y') }}</p>
+                        <p class="text-xl sm:text-2xl font-bold text-white">{{ \Carbon\Carbon::parse($invoice->invoice_date)->format('d M Y') }}</p>
                     </div>
                 </div>
             </div>
 
             <!-- Invoice Content -->
-            <div class="p-8">
+            <div class="p-4 sm:p-8">
                 <!-- Seller & Customer Details -->
                 <div class="grid md:grid-cols-2 gap-8 mb-8 pb-8 border-b border-gray-200">
                     <!-- Seller Details -->
@@ -106,12 +106,10 @@
                 </div>
 
                 <!-- Summary Section -->
-                <div class="grid md:grid-cols-3 gap-6">
-                    <div></div>
-                    <div></div>
+                <div class="flex justify-end">
                     
                     <!-- Total Summary -->
-                    <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-6 border border-gray-200">
+                    <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-6 border border-gray-200 w-full sm:w-80 md:w-96">
                         <div class="space-y-3">
                             <div class="flex justify-between items-center">
                                 <span class="text-gray-600">Subtotal</span>
@@ -183,7 +181,7 @@
             </div>
 
             <!-- Footer -->
-            <div class="bg-gray-50 px-8 py-6 border-t border-gray-200">
+            <div class="bg-gray-50 px-4 sm:px-8 py-6 border-t border-gray-200">
                 <p class="text-center text-sm text-gray-500">
                     Thank you for your business! This is a computer-generated invoice and does not require a signature.
                 </p>

@@ -20,7 +20,7 @@
         </div>
 
         {{-- Settings Tabs --}}
-        <div class="flex space-x-4 mb-6 border-b border-gray-200">
+        <div class="flex flex-wrap gap-2 sm:gap-0 sm:space-x-4 mb-6 border-b border-gray-200">
             <button class="settings-tab px-4 py-3 border-b-2 border-blue-600 text-blue-600 font-semibold" data-tab="account">
                 Account Settings
             </button>

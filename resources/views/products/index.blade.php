@@ -11,16 +11,17 @@
         </script>
     @endif
 
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-900">Products</h1>
-        <a href="{{ route('products.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition flex items-center space-x-2">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Products</h1>
+        <a href="{{ route('products.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 rounded-lg font-medium transition flex items-center space-x-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
             </svg>
             <span>Add Product</span>
         </a>
     </div>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col" style="height: 500px;">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col" style="max-height: 70vh; min-height: 300px;">
+          <div class="overflow-x-auto overflow-y-auto flex-1">
             <table class="w-full">
                 <thead>
                     <tr class="bg-gray-50 border-b border-gray-200">
@@ -91,8 +92,8 @@
                     @endforelse
                 </tbody>
             </table>
+          </div>
         </div>
-    </div>
 
     <div class="mt-6">
         {{ $products->links() }}
