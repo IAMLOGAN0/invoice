@@ -165,6 +165,22 @@
                                     <span class="{{ $invoice->due_amount > 0 ? 'text-red-600' : 'text-green-600' }} font-semibold">₹{{ number_format($invoice->due_amount, 2) }}</span>
                                 </div>
                                 <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Payment Method</span>
+                                    @php
+                                        $methodLabels = [
+                                            'cash' => 'Cash',
+                                            'card' => 'Card',
+                                            'google_pay' => 'Google Pay',
+                                            'phone_pe' => 'Phone Pe',
+                                            'paytm' => 'Paytm',
+                                            'others' => 'Others',
+                                        ];
+                                    @endphp
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        {{ $methodLabels[$invoice->payment_method] ?? ucfirst($invoice->payment_method ?? 'cash') }}
+                                    </span>
+                                </div>
+                                <div class="flex justify-between items-center">
                                     <span class="text-gray-600">Status</span>
                                     @if($invoice->payment_status === 'paid')
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Paid</span>

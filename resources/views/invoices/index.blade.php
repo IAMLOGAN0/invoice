@@ -21,18 +21,35 @@
         </a>
     </div>
 
-    <!-- Search Bar -->
+    <!-- Search & Filters -->
     <div class="mb-6">
-        <form method="GET" action="{{ route('invoices.index') }}" class="flex flex-col sm:flex-row gap-2">
-            <input type="text" name="search" placeholder="Search by invoice number, customer name or phone..." value="{{ request('search') }}" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
-            <button type="submit" class="bg-gray-800 hover:bg-gray-900 text-white px-6 py-2 rounded-lg font-medium transition">
-                Search
-            </button>
-            @if(request('search'))
-                <a href="{{ route('invoices.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-2 rounded-lg font-medium transition">
-                    Reset
-                </a>
-            @endif
+        <form method="GET" action="{{ route('invoices.index') }}" class="flex flex-col gap-3">
+            <div class="flex flex-col sm:flex-row gap-2">
+                <input type="text" name="search" placeholder="Search by invoice number, customer name or phone..." value="{{ request('search') }}" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-sm">
+                <select name="payment_status" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-sm">
+                    <option value="">All Status</option>
+                    <option value="paid" {{ request('payment_status') == 'paid' ? 'selected' : '' }}>Paid</option>
+                    <option value="partial" {{ request('payment_status') == 'partial' ? 'selected' : '' }}>Partial</option>
+                    <option value="unpaid" {{ request('payment_status') == 'unpaid' ? 'selected' : '' }}>Unpaid</option>
+                </select>
+                <select name="payment_method" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-sm">
+                    <option value="">All Payment Types</option>
+                    <option value="cash" {{ request('payment_method') == 'cash' ? 'selected' : '' }}>Cash</option>
+                    <option value="card" {{ request('payment_method') == 'card' ? 'selected' : '' }}>Card</option>
+                    <option value="google_pay" {{ request('payment_method') == 'google_pay' ? 'selected' : '' }}>Google Pay</option>
+                    <option value="phone_pe" {{ request('payment_method') == 'phone_pe' ? 'selected' : '' }}>Phone Pe</option>
+                    <option value="paytm" {{ request('payment_method') == 'paytm' ? 'selected' : '' }}>Paytm</option>
+                    <option value="others" {{ request('payment_method') == 'others' ? 'selected' : '' }}>Others</option>
+                </select>
+                <button type="submit" class="bg-gray-800 hover:bg-gray-900 text-white px-6 py-2 rounded-lg font-medium transition text-sm">
+                    Search
+                </button>
+                @if(request('search') || request('payment_status') || request('payment_method'))
+                    <a href="{{ route('invoices.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-2 rounded-lg font-medium transition text-sm text-center">
+                        Reset
+                    </a>
+                @endif
+            </div>
         </form>
     </div>
 
@@ -47,6 +64,7 @@
                         <th class="hidden sm:table-cell px-2 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-900">Date</th>
                         <th class="px-2 sm:px-6 py-3 sm:py-4 text-right sm:text-left text-xs sm:text-sm font-semibold text-gray-900">Amount</th>
                         <th class="hidden sm:table-cell px-2 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-900">Status</th>
+                        <th class="hidden sm:table-cell px-2 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-900">Payment</th>
                         <th class="px-2 sm:px-6 py-3 sm:py-4 text-center text-xs sm:text-sm font-semibold text-gray-900">Action</th>
                     </tr>
                 </thead>
@@ -70,6 +88,21 @@
                                 @else
                                     <span class="inline-flex items-center px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">Unpaid</span>
                                 @endif
+                            </td>
+                            <td class="hidden sm:table-cell px-2 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700">
+                                @php
+                                    $methodLabels = [
+                                        'cash' => 'Cash',
+                                        'card' => 'Card',
+                                        'google_pay' => 'Google Pay',
+                                        'phone_pe' => 'Phone Pe',
+                                        'paytm' => 'Paytm',
+                                        'others' => 'Others',
+                                    ];
+                                @endphp
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                    {{ $methodLabels[$invoice->payment_method] ?? ucfirst($invoice->payment_method ?? 'cash') }}
+                                </span>
                             </td>
                             <td class="px-2 sm:px-6 py-3 sm:py-4 text-center">
                                 <div class="flex justify-center">
@@ -115,7 +148,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-2 sm:px-6 py-8 sm:py-12 text-center">
+                            <td colspan="7" class="px-2 sm:px-6 py-8 sm:py-12 text-center">
                                 <div class="flex flex-col items-center justify-center">
                                     <svg class="w-10 h-10 sm:w-12 sm:h-12 text-gray-400 mb-3 sm:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>

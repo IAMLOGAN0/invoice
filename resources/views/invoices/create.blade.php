@@ -1100,6 +1100,20 @@
                     </div>
                 </div>
 
+                {{-- Immediately disable all mobile inputs so they don't submit duplicate values on desktop.
+                     On mobile, the DOMContentLoaded handler below will swap which container is active. --}}
+                <script>
+                (function() {
+                    var mc = document.getElementById('mobileItemsContainer');
+                    if (mc) {
+                        var inputs = mc.querySelectorAll('input, select, textarea');
+                        for (var i = 0; i < inputs.length; i++) {
+                            inputs[i].disabled = true;
+                        }
+                    }
+                })();
+                </script>
+
                 <!-- Discount Section (Mobile Only) -->
                 <div class="lg:hidden mb-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
                     <div class="flex items-center space-x-2 mb-4">
@@ -1187,6 +1201,17 @@
                         <div class="flex justify-between text-lg border-t pt-3 border-gray-200">
                             <span class="font-bold">Grand Total:</span>
                             <span class="font-bold text-indigo-600" id="grandTotal">₹0.00</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm pt-2">
+                            <label for="payment_method" class="text-gray-700 font-medium">Payment Type:</label>
+                            <select name="payment_method" id="payment_method" class="w-40 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                                <option value="cash">Cash</option>
+                                <option value="card">Card</option>
+                                <option value="google_pay">Google Pay</option>
+                                <option value="phone_pe">Phone Pe</option>
+                                <option value="paytm">Paytm</option>
+                                <option value="others">Others</option>
+                            </select>
                         </div>
                         <div class="flex justify-between items-center text-sm pt-2">
                             <label for="paid_amount" class="text-gray-700 font-medium">Amount Paid:</label>
@@ -1457,25 +1482,54 @@
     }
 
     // Before form submit, disable inputs from the hidden layout to avoid duplicates
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('form');
-        if (form) {
-            form.addEventListener('submit', function() {
-                const isMobile = window.innerWidth < 640;
-                if (isMobile) {
-                    // Disable desktop table inputs
-                    document.querySelectorAll('#itemsContainer input, #itemsContainer select').forEach(function(el) {
-                        el.disabled = true;
-                    });
-                } else {
-                    // Disable mobile card inputs
-                    document.querySelectorAll('#mobileItemsContainer input, #mobileItemsContainer select').forEach(function(el) {
-                        el.disabled = true;
-                    });
+   document.addEventListener('DOMContentLoaded', function () {
+    // On mobile, swap which container is active: enable mobile, disable desktop
+    if (window.innerWidth < 640) {
+        var desktop = document.getElementById('itemsContainer');
+        var mobile = document.getElementById('mobileItemsContainer');
+        if (desktop) {
+            desktop.querySelectorAll('input, select, textarea').forEach(function(el) { el.disabled = true; });
+        }
+        if (mobile) {
+            mobile.querySelectorAll('input, select, textarea').forEach(function(el) { el.disabled = false; });
+        }
+    }
+
+    const form = document.querySelector('form');
+
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            const isMobile = window.innerWidth < 640;
+
+            // Remove inactive layout entirely to be safe
+            if (isMobile) {
+                const desktop = document.getElementById('itemsContainer');
+                if (desktop) desktop.remove();
+            } else {
+                const mobile = document.getElementById('mobileItemsContainer');
+                if (mobile) mobile.remove();
+            }
+
+            // Validate product selection
+            const inputs = document.querySelectorAll('.product-select-input:not([disabled])');
+
+            let hasError = false;
+
+            inputs.forEach((input, index) => {
+                if (!input.value) {
+                    console.error(`Missing product at row ${index}`);
+                    hasError = true;
                 }
             });
-        }
-    });
+
+            if (hasError) {
+                e.preventDefault();
+                alert('Please select product in all rows');
+                return false;
+            }
+        });
+    }
+});
 
     function updateDueAmount() {
         const grandTotalText = document.getElementById('grandTotal').textContent;
@@ -1662,43 +1716,51 @@
         }
     }
 
-    function selectProduct(event, optionElement) {
+    function selectProduct(event, element) {
         event.preventDefault();
         event.stopPropagation();
-        
-        const wrapper = optionElement.closest('.product-select-wrapper');
-        const hiddenInput = wrapper.querySelector('.product-select-input');
-        const header = wrapper.querySelector('.product-select-header');
-        const valueSpan = header.querySelector('.product-select-value');
-        const dropdown = wrapper.querySelector('.product-select-dropdown');
-        const clearBtn = header.querySelector('.product-select-clear');
-        
-        const productId = optionElement.dataset.productId;
-        const productName = optionElement.dataset.productName;
-        const productHsn = optionElement.dataset.productHsn;
-        
-        // Update hidden input value
-        hiddenInput.value = productId;
-        
-        // Update display
-        valueSpan.textContent = productName;
-        valueSpan.classList.remove('placeholder');
-        
-        // Show clear button
-        clearBtn.classList.add('visible');
-        
-        // Update selected state in options
+
+        const wrapper = element.closest('.product-select-wrapper');
+
+        const productId = element.dataset.productId;
+        const productName = element.dataset.productName;
+        const productPrice = element.dataset.productPrice;
+        const productGst = element.dataset.productGst;
+
+        // ✅ SET hidden input value (MAIN FIX)
+        const input = wrapper.querySelector('.product-select-input');
+        input.value = productId;
+
+        // trigger change
+        input.dispatchEvent(new Event('change'));
+
+        // ✅ Update UI
+        const display = wrapper.querySelector('.product-select-value');
+        display.textContent = productName;
+        display.classList.remove('placeholder');
+
+        // mark selected
         wrapper.querySelectorAll('.product-select-option').forEach(opt => {
             opt.classList.remove('selected');
         });
-        optionElement.classList.add('selected');
-        
-        // Close dropdown
+        element.classList.add('selected');
+
+        // ✅ Auto fill price & tax
+        const row = wrapper.closest('.product-row, .product-card');
+
+        if (row) {
+            const priceInput = row.querySelector('.price-input');
+            const taxInput = row.querySelector('.tax-input');
+
+            if (priceInput && productPrice) priceInput.value = productPrice;
+            if (taxInput && productGst) taxInput.value = productGst;
+        }
+
+        // close dropdown
+        const dropdown = wrapper.querySelector('.product-select-dropdown');
         dropdown.classList.remove('open');
-        header.classList.remove('focused');
-        
-        // Trigger change event to update totals
-        hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
+
+        updateTotal(input);
     }
 
     function clearProductSelect(event, clearButton) {

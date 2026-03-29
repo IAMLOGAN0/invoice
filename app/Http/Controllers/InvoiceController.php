@@ -31,6 +31,14 @@ class InvoiceController extends Controller
             });
         }
 
+        if ($status = $request->input('payment_status')) {
+            $query->where('payment_status', $status);
+        }
+
+        if ($method = $request->input('payment_method')) {
+            $query->where('payment_method', $method);
+        }
+
         $invoices = $query->paginate(10)->withQueryString();
         return view('invoices.index', compact('invoices'));
     }
@@ -79,6 +87,7 @@ class InvoiceController extends Controller
                 'flat_discount' => 'nullable|numeric|min:0',
                 'discount_amount' => 'nullable|numeric|min:0',
                 'paid_amount' => 'nullable|numeric|min:0',
+                'payment_method' => 'nullable|in:cash,card,google_pay,phone_pe,paytm,others',
                 'items' => 'required|array|min:1',
                 'items.*.product_id' => 'required|exists:products,id',
                 'items.*.quantity' => 'required|integer|min:1',
@@ -115,7 +124,7 @@ class InvoiceController extends Controller
                     'shop_id' => $shop->id,
                 ]);
             }
-
+        
         $items = collect($request->items)->map(function ($item) {
             return [
                 'product' => Product::findOrFail($item['product_id']),
@@ -229,6 +238,7 @@ class InvoiceController extends Controller
                 'paid_amount' => $paidAmount,
                 'due_amount' => $dueAmount,
                 'payment_status' => $paymentStatus,
+                'payment_method' => $request->input('payment_method', 'cash'),
             ]);
 
             foreach ($invoiceItems as $itemData) {
@@ -240,7 +250,7 @@ class InvoiceController extends Controller
                 $invoice->payments()->create([
                     'customer_id' => $customer->id,
                     'amount' => $paidAmount,
-                    'payment_method' => 'cash',
+                    'payment_method' => $request->input('payment_method', 'cash'),
                     'note' => 'Initial payment on invoice creation',
                 ]);
             }

@@ -368,6 +368,28 @@
             <td>Paid Amount</td>
             <td style="color: #16a34a; font-weight: bold;">₹{{ number_format($invoice->paid_amount,2) }}</td>
         </tr>
+        <tr>
+            <td>Payment Method</td>
+            <td style="font-weight: bold;">
+                @php
+                    $methodLabels = [
+                        'cash' => 'Cash',
+                        'card' => 'Card',
+                        'google_pay' => 'Google Pay',
+                        'phone_pe' => 'Phone Pe',
+                        'paytm' => 'Paytm',
+                        'others' => 'Others',
+                    ];
+                @endphp
+                {{ $methodLabels[$invoice->payment_method] ?? ucfirst($invoice->payment_method ?? 'cash') }}
+            </td>
+        </tr>
+        <tr>
+            <td>Payment Status</td>
+            <td style="font-weight: bold; color: @if($invoice->payment_status === 'paid')#16a34a @elseif($invoice->payment_status === 'partial')#f59e0b @else#dc2626 @endif;">
+                {{ ucfirst($invoice->payment_status) }}
+            </td>
+        </tr>
         @if($invoice->due_amount > 0)
         <tr>
             <td>Due Amount</td>
